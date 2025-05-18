@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks; 
-using EventManagementSystem.Data; 
-using EventManagementSystem.Models; 
-using Microsoft.AspNetCore.Mvc; 
+using EventManagementSystem.Data;
+using EventManagementSystem.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementSystem.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class EventController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -21,8 +21,15 @@ public class EventController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<Event>>> GetEvents()
     {
-        var events = await _context.Events.ToListAsync();
-        return Ok(events);
+        try
+        {
+            var events = await _context.Events.ToListAsync();
+            return Ok(events);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error retrieving events: {ex.Message}\nInner Exception: {ex.InnerException?.Message}");
+        }
     }
 
     // new Event
