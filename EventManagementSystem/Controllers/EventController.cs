@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks; 
-using EventManagementSystem.Data; 
-using EventManagementSystem.Models; 
-using Microsoft.AspNetCore.Mvc; 
+using EventManagementSystem.Data;
+using EventManagementSystem.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementSystem.Controllers;
 
+[ApiController]
 [Route("api/[controller]")]
 [ApiController]
 public class EventController : ControllerBase

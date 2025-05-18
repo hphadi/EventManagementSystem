@@ -2,15 +2,15 @@
 
 namespace EventManagementSystem.Models;
 
-public class Person
-{
-    public int Id { get; set; }
+    public class Person
+    {
+        public int Id { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     [Required]
     [StringLength(100)]
-    public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
     [EmailAddress]
     [StringLength(100)]

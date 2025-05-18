@@ -1,4 +1,5 @@
-﻿using EventManagementSystem.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using EventManagementSystem.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventManagementSystem.Data;
