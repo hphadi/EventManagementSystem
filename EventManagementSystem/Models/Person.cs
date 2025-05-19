@@ -17,5 +17,5 @@ namespace EventManagementSystem.Models;
     public string Email { get; set; } = string.Empty;
 
     // Navigation property
-    public List<GroupMember> GroupMembers { get; set; } = new List<GroupMember>();
+    //public List<GroupMember> GroupMembers { get; set; } = new List<GroupMember>();
 }

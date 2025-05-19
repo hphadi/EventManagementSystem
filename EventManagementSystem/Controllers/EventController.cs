@@ -8,7 +8,6 @@ namespace EventManagementSystem.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[ApiController]
 public class EventController : ControllerBase
 {
     private readonly AppDbContext _context;
@@ -52,7 +51,7 @@ public class EventController : ControllerBase
         var group = await _context.Groups.FindAsync(groupId);
         if (eventEntity == null || group == null) return NotFound();
 
-        _context.EventGroups.Add(new EventGroup { EventId = eventId, GroupId = groupId });
+        //_context.EventGroups.Add(new EventGroup { EventId = eventId, GroupId = groupId });
         await _context.SaveChangesAsync();
         return NoContent();
     }
