@@ -38,7 +38,7 @@ public class EventController : ControllerBase
     {
         _context.Events.Add(newEvent);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetEvent), new { id = newEvent.Id }, newEvent);
+        return Ok(newEvent);
     }
 
     // get Event with ID
@@ -58,7 +58,7 @@ public class EventController : ControllerBase
         var group = await _context.Groups.FindAsync(groupId);
         if (eventEntity == null || group == null) return NotFound();
 
-        _context.EventGroups.Add(new EventGroup { EventId = eventId, GroupId = groupId });
+        //_context.EventGroups.Add(new EventGroup { EventId = eventId, GroupId = groupId });
         await _context.SaveChangesAsync();
         return NoContent();
     }

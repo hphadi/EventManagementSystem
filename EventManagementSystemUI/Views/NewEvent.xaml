@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="EventManagementSystemUI.Views.NewEvent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EventManagementSystemUI.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Margin="10">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="New Event" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+            <TextBox x:Name="txtTitle" Margin="5" Padding="5" Text="Enter Title"/>
+            <TextBox x:Name="rtxtDescription" Margin="5" Padding="5" Text="Enter Description" Height="60" AcceptsReturn="True"/>
+            <DatePicker x:Name="dtmPickerStartDate" Margin="5"/>
+            <DatePicker x:Name="dtmPickerEndDate" Margin="5"/>
+            <TextBox x:Name="txtLocation" Margin="5" Padding="5" Text="Enter Location"/>
+            <Button Content="Submit" Margin="5" Padding="5" Background="LightGreen"/>
+            <Button Content="Toggle Open New Event Button" Command="{Binding ToggleOpenNewEventButtonCommand}" Margin="5" Padding="5" Background="LightBlue"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

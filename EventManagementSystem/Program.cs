@@ -1,5 +1,6 @@
 using EventManagementSystem.Data;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,24 @@ catch (Exception ex)
     return;
 }
 #endif
+
+try
+{
+    var connectionString = "Host=db.hkminlytudanwvsgznxg.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=QuwUxFd6TJimfCQZ;SSL Mode=Require;Trust Server Certificate=true";
+    using (var connection = new NpgsqlConnection(connectionString))
+    {
+        
+            connection.Open();
+            Console.WriteLine("Connection successful!");
+        
+        
+    }
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Connection failed: {ex.Message}");
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
