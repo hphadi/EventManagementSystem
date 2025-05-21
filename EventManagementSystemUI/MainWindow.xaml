@@ -22,8 +22,7 @@
                
                 <Button Content="Groups" Command="{Binding NavigateCommand}" CommandParameter="Groups" Margin="5" />
                 <Button Content="Profile" Command="{Binding NavigateCommand}" CommandParameter="Profile" Margin="5" />
-                
-                <Button Content="New Event"  Visibility= "{Binding SecondButtonVisibility}"/>
+                <Button Content="New Event"  Visibility= "{Binding NewEventButtonVisibility}"/>
             </StackPanel>
         </materialDesign:Card>
         <!-- Main Content -->

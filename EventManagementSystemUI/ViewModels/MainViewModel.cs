@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EventManagementSystemUI.Views;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json; 
@@ -17,7 +18,7 @@ namespace EventManagementSystemUI.ViewModels
         private ObservableCollection<EventManagementSystem.Models.Event> futureEvents;
 
         [ObservableProperty]
-        private Visibility secondButtonVisibility = Visibility.Hidden;
+        private Visibility newEventButtonVisibility = Visibility.Hidden;
 
         private readonly HttpClient _httpClient;
 
@@ -71,28 +72,36 @@ namespace EventManagementSystemUI.ViewModels
             switch (page)
             {
                 case "Dashboard":
-                    frame.Navigate(new Uri("Views/DashboardView.xaml", UriKind.Relative));
+                    frame.Content = new DashboardView { DataContext = this };
                     break;
                 case "Events":
-                    frame.Navigate(new Uri("Views/EventManagementView.xaml", UriKind.Relative));
+                    frame.Content = new EventManagementView { DataContext = this };
                     break;
                 case "Groups":
-                    frame.Navigate(new Uri("Views/GroupManagementView.xaml", UriKind.Relative));
+                    frame.Content = new GroupManagementView { DataContext = this };
                     break;
                 case "Profile":
-                    frame.Navigate(new Uri("Views/ProfileView.xaml", UriKind.Relative));
+                    frame.Content = new ProfileView { DataContext = this };
                     break;
                 case "NewEvent":
-                    frame.Navigate(new Uri("Views/NewEvent.xaml", UriKind.Relative));
+                    frame.Content = new NewEvent { DataContext = this };
                     break;
             }
         }
 
         [RelayCommand]
-        private void NewEvent(string page)
+        private void NewEvent()
         {
-            SecondButtonVisibility = SecondButtonVisibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
-            //SecondButtonVisibility = Visibility.Visible;
+                NewEventButtonVisibility = Visibility.Visible;
+                var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+                frame.Content = new NewEvent { DataContext = this };
+        }
+        [RelayCommand]
+        private void HideNewEvent()
+        {
+            NewEventButtonVisibility = Visibility.Collapsed;
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            frame.Content = new EventManagementView { DataContext = this };
         }
     }
 }

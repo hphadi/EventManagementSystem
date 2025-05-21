@@ -1,16 +1,18 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using EventManagementSystemUI.ViewModels;
 
 namespace EventManagementSystemUI
 {
     public partial class MainWindow : Window
     {
-        public MainViewModel ViewModel { get; } = new MainViewModel();
+        private readonly MainViewModel _viewModel = new MainViewModel();
 
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = ViewModel;
+            DataContext = _viewModel;
+
         }
     }
 }

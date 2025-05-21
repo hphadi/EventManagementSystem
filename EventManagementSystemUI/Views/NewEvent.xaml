@@ -16,7 +16,7 @@
             <DatePicker x:Name="dtmPickerEndDate" Margin="5"/>
             <TextBox x:Name="txtLocation" Margin="5" Padding="5" Text="Enter Location"/>
             <Button Content="Submit" Margin="5" Padding="5" Background="LightGreen"/>
-            <Button Content="Toggle Open New Event Button" Command="{Binding ToggleOpenNewEventButtonCommand}" Margin="5" Padding="5" Background="LightBlue"/>
+            <Button Content="Cancel" Command="{Binding HideNewEventCommand}" Margin="5" Padding="5" Background="LightBlue"/>
         </StackPanel>
     </Grid>
 </UserControl>
