@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using EventManagementSystemUI.ViewModels;
+using EventManagementSystem.Models;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EventManagementSystemUI.Views
 {
@@ -23,6 +12,18 @@ namespace EventManagementSystemUI.Views
         public NewEvent()
         {
             InitializeComponent();
+            DataContextChanged += (s, e) =>
+            {
+                if (DataContext is MainViewModel vm)
+                {
+                    GroupsListBox.SelectionChanged += (s2, e2) =>
+                    {
+                        vm.SelectedGroups.Clear();
+                        foreach (Group item in GroupsListBox.SelectedItems)
+                            vm.SelectedGroups.Add(item);
+                    };
+                }
+            };
         }
     }
 }

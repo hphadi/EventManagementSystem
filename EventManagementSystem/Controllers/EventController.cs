@@ -4,6 +4,7 @@ using EventManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace EventManagementSystem.Controllers;
 
 [ApiController]
@@ -34,6 +35,34 @@ public class EventController : ControllerBase
 
     // new Event
     [HttpPost]
+
+    public async Task<IActionResult> CreateEvent(EventDto dto)
+    {
+        var newEvent = new Event
+        {
+            Title = dto.Title,
+            Description = dto.Description,
+            StartDate = dto.StartDate,
+            EndDate = dto.EndDate,
+            CreatedAt = dto.CreatedAt,
+            Location = dto.Location
+        };
+
+        _context.Events.Add(newEvent);
+        await _context.SaveChangesAsync();
+
+        foreach (var groupId in dto.GroupIds)
+        {
+            _context.EventGroups.Add(new EventGroup
+            {
+                EventId = newEvent.Id,
+                GroupId = groupId
+            });
+        }
+
+        await _context.SaveChangesAsync();
+        return Ok(newEvent);
+    }
     public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
     {
         _context.Events.Add(newEvent);

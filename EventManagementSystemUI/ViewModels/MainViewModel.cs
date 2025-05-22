@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EventManagementSystemUI.Views;
+using EventManagementSystem.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json; 
@@ -22,6 +23,7 @@ namespace EventManagementSystemUI.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<EventManagementSystem.Models.Group> groups;
+        public ObservableCollection<Group> SelectedGroups { get; set; } = new();
 
         [ObservableProperty]
         private string eventTitle = "";
@@ -137,16 +139,6 @@ namespace EventManagementSystemUI.ViewModels
             }
         }
 
-        //[RelayCommand]
-        //private void NewEvent()
-        //{
-        //    var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-        //    if (frame != null && frame.Content is NewEvent)
-        //    {
-        //        // 
-        //    }
-        //}
-
         [RelayCommand]
         private void ShowNewEvent()
         {
@@ -157,14 +149,6 @@ namespace EventManagementSystemUI.ViewModels
                 NewEventButtonVisibility = Visibility.Visible;
             }
         }
-
-        //[RelayCommand]
-        //private void HideNewEvent()
-        //{
-        //    NewEventButtonVisibility = Visibility.Collapsed;
-        //    var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-        //    frame.Content = new EventManagementView { DataContext = this };
-        //}
 
         [RelayCommand]
         private async Task SubmitNewEvent()
@@ -182,14 +166,15 @@ namespace EventManagementSystemUI.ViewModels
             var startDateUtc = EventStartDateTime.Value.ToUniversalTime();
             var endDateUtc = EventEndDateTime.Value.ToUniversalTime();
 
-            var newEvent = new EventManagementSystem.Models.Event
+            var newEvent = new EventManagementSystem.Models.EventDto
             {
                 Title = EventTitle,
                 Description = EventDescription,
                 StartDate = startDateUtc,
                 EndDate = endDateUtc,
                 Location = EventLocation,
-                CreatedAt = DateTime.Now.ToUniversalTime()
+                CreatedAt = DateTime.Now.ToUniversalTime(),
+                GroupIds = SelectedGroups.Select(g => g.Id).ToList()
             };
 
 

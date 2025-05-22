@@ -18,6 +18,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/>
@@ -66,8 +67,79 @@
                  Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
                  materialDesign:HintAssist.Hint="Enter event location" 
                  materialDesign:HintAssist.IsFloating="True"/>
+        <ListBox Grid.Row="6"
+         x:Name="GroupsListBox"
+         ItemsSource="{Binding Groups}"
+         SelectionMode="Multiple"
+         Margin="5"
+         Height="150"
+         FontSize="14"
+         ScrollViewer.VerticalScrollBarVisibility="Auto"
+         BorderBrush="#CCC"
+         BorderThickness="1">
+
+            <!-- Item layout -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#DDD"
+                    BorderThickness="0 0 0 1"
+                    Padding="6"
+                    Background="White">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="{Binding Name}" 
+                               FontWeight="SemiBold" 
+                               VerticalAlignment="Center" />
+
+                            <TextBlock Text="{Binding Id}" 
+                               Foreground="Gray" 
+                               FontSize="12" 
+                               Margin="10 0 0 0"
+                               Grid.Column="1" 
+                               VerticalAlignment="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+            <!-- Optional styling for selection feedback -->
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="Padding" Value="2" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListBoxItem">
+                                <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#D0EBFF" />
+                            <Setter Property="BorderBrush" Value="#4DA3FF" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
         <!-- Buttons -->
-        <StackPanel Grid.Row="6" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
             <Button Content="Submit" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
                     Background="#FF4CAF50" Foreground="White" Command="{Binding SubmitNewEventCommand}"
                     >
