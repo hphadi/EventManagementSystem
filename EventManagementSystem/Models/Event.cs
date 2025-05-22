@@ -6,6 +6,8 @@ public class Event
     public string Description { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+
+    public DateTime CreatedAt { get; set; }
     public string Location { get; set; } = string.Empty;
 
     //public List<EventGroup> EventGroups { get; set; } = new List<EventGroup>();

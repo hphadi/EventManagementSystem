@@ -156,7 +156,8 @@ namespace EventManagementSystemUI.ViewModels
                 Description = EventDescription,
                 StartDate = startDateUtc,
                 EndDate = endDateUtc,
-                Location = EventLocation
+                Location = EventLocation,
+                CreatedAt = DateTime.Now.ToUniversalTime()
             };
 
 
