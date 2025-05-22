@@ -2,10 +2,13 @@
 using CommunityToolkit.Mvvm.Input;
 using EventManagementSystemUI.Views;
 using EventManagementSystem.Models;
+using EventManagementSystemUI.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json; 
-using System.Windows; 
+using System.Windows;
+using EventManagementSystemUI.Tools;
+using System.Net;
 
 
 namespace EventManagementSystemUI.ViewModels
@@ -19,7 +22,16 @@ namespace EventManagementSystemUI.ViewModels
         private ObservableCollection<EventManagementSystem.Models.Event> futureEvents;
 
         [ObservableProperty]
-        private Visibility newEventButtonVisibility = Visibility.Hidden;
+        private Visibility newEventButtonVisibility = Visibility.Collapsed;
+
+        [ObservableProperty]
+        private Visibility registrationButtonVisibility = Visibility.Visible;
+        
+        [ObservableProperty]
+        private Visibility signInButtonVisibility = Visibility.Visible;
+        
+        [ObservableProperty]
+        private Visibility signOutButtonVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
         private ObservableCollection<EventManagementSystem.Models.Group> groups;
@@ -38,9 +50,17 @@ namespace EventManagementSystemUI.ViewModels
         private DateTime? eventEndDateTime;
 
         [ObservableProperty]
+        private NewUser newUser = new();
+
+        [ObservableProperty]
+        private LoginUser loginUser = new();
+
+        [ObservableProperty]
         private string eventLocation = "";
 
         private readonly HttpClient _httpClient;
+
+        private EventManagementSystem.Models.Person CurrentUser = new();
 
         public MainViewModel()
         {
@@ -136,6 +156,12 @@ namespace EventManagementSystemUI.ViewModels
                     frame.Content = new NewEvent { DataContext = this };
                     NewEventButtonVisibility = Visibility.Visible;
                     break;
+                case "Register":
+                    frame.Content = new SignUpView { DataContext = this };
+                    break;
+                case "SignIn":
+                    frame.Content = new SignIn{ DataContext = this };
+                    break;
             }
         }
 
@@ -200,7 +226,7 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private void CancelNewEvent()
         {
-            NewEventButtonVisibility = Visibility.Hidden; 
+            NewEventButtonVisibility = Visibility.Collapsed; 
             var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
             if (frame != null)
             {
@@ -210,6 +236,121 @@ namespace EventManagementSystemUI.ViewModels
                 EventStartDateTime = null;
                 EventEndDateTime = null;
                 EventLocation = "";
+            }
+        }
+
+        [RelayCommand]
+        private async Task SubmitRegistration()
+        {
+            if (NewUser.IsValid() == false)
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            else if (NewUser.Password != NewUser.RepeatPassword)
+            {
+                MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var newUser = new PersonDto
+            {
+                Name = NewUser.Name,
+                Username = NewUser.UserName,
+                Password = PasswordHasher.Hash(NewUser.Password)
+            };
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("person/register", newUser);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CloseRegistrationCommand?.Execute(null);
+                }
+                else if (response.StatusCode == HttpStatusCode.Conflict)
+                {
+                    MessageBox.Show("Username already exists.", "Conflict", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show($"Registration failed: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        [RelayCommand]
+        private async Task SubmitSignIn()
+        {
+            if (LoginUser.IsValid() == false)
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var loginRequest = new Person
+            {
+                Username = LoginUser.UserName,
+                Password = PasswordHasher.Hash(LoginUser.Password)
+            };
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("person/login", loginRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var person = await response.Content.ReadFromJsonAsync<Person>();
+
+                    // Optionally store logged-in user
+                    CurrentUser = person;
+
+                    MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CloseRegistrationCommand?.Execute(null);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    MessageBox.Show("Invalid username or password.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show($"Login error: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Login exception: {ex.Message}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        [RelayCommand]
+        private void CloseRegistration()
+        {
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            if (frame != null)
+            {
+                frame.Content = new DashboardView { DataContext = this };
+                NewUser.Clear();
+            }
+        }
+
+        [RelayCommand]
+        private void SingOut()
+        {
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            if (frame != null)
+            {
+                frame.Content = new DashboardView { DataContext = this };
+                NewUser.Clear();
+                RegistrationButtonVisibility = Visibility.Visible;
+                SignInButtonVisibility = Visibility.Visible;
             }
         }
 

@@ -16,19 +16,50 @@ public class PersonController : ControllerBase
         _context = context;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> AddPerson(Person person)
+    // ✅ Sign up (registration)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(Person person)
     {
-        // Don't set CreatedAt manually
+        // Check for duplicate username
+        if (await _context.People.AnyAsync(p => p.Username == person.Username))
+        {
+            return Conflict("Username already exists.");
+        }
+
         _context.People.Add(person);
         await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetPeople), new { id = person.Id }, person);
+        return Ok(person);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetPeople()
+    // ✅ Sign in (authentication)
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(Person loginRequest)
     {
-        var people = await _context.People.ToListAsync();
-        return Ok(people);
+        var person = await _context.People
+            .FirstOrDefaultAsync(p => p.Username == loginRequest.Username && p.Password == loginRequest.Password);
+
+        if (person == null)
+        {
+            return Unauthorized("Invalid username or password.");
+        }
+
+        // Optionally remove sensitive data (e.g. password) before returning
+        person.Password = "";
+        return Ok(person);
+    }
+
+    // ✅ Delete user
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var person = await _context.People.FindAsync(id);
+        if (person == null)
+        {
+            return NotFound();
+        }
+
+        _context.People.Remove(person);
+        await _context.SaveChangesAsync();
+        return NoContent();
     }
 }
