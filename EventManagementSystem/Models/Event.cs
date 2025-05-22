@@ -9,6 +9,5 @@ public class Event
 
     public DateTime CreatedAt { get; set; }
     public string Location { get; set; } = string.Empty;
-
-    //public List<EventGroup> EventGroups { get; set; } = new List<EventGroup>();
+    public List<EventGroup> EventGroups { get; set; } = new List<EventGroup>();
 }

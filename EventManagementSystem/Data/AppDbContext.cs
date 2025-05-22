@@ -10,13 +10,13 @@ public class AppDbContext : DbContext
     public DbSet<Event> Events { get; set; }
     public DbSet<Group> Groups { get; set; }
     public DbSet<Person> People { get; set; }
-    //public DbSet<EventGroup> EventGroups { get; set; }
+    public DbSet<EventGroup> EventGroups { get; set; }
     //public DbSet<GroupMember> GroupMembers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //modelBuilder.Entity<EventGroup>()
-        //    .HasKey(eg => new { eg.EventId, eg.GroupId });
+        modelBuilder.Entity<EventGroup>()
+            .HasKey(eg => new { eg.EventId, eg.GroupId });
 
         //modelBuilder.Entity<EventGroup>()
         //    .HasOne(eg => eg.Event)

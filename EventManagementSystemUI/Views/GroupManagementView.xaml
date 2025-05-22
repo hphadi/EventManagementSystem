@@ -6,7 +6,8 @@
         <StackPanel>
             <TextBlock Text="Manage Groups" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Margin="10" 
                        materialDesign:ElevationAssist.Elevation="Dp2"/>
-            <ListView Height="400" ItemsSource="{Binding Groups}">
+            <ListView Height="400" ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup, Mode=TwoWay}" MouseDoubleClick="ListView_MouseDoubleClick"
+                      >
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150" />

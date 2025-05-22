@@ -1,11 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EventManagementSystem.Models;
 using EventManagementSystemUI.Views;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json; 
-using System.Windows; 
-
+using System.Windows;
+using System.Windows.Controls;
 
 namespace EventManagementSystemUI.ViewModels
 {
@@ -18,10 +19,19 @@ namespace EventManagementSystemUI.ViewModels
         private ObservableCollection<EventManagementSystem.Models.Event> futureEvents;
 
         [ObservableProperty]
-        private Visibility newEventButtonVisibility = Visibility.Hidden;
+        private ObservableCollection<EventManagementSystem.Models.Group> groups;
 
         [ObservableProperty]
-        private ObservableCollection<EventManagementSystem.Models.Group> groups;
+        private Group selectedGroup;
+
+        [ObservableProperty]
+        private ObservableCollection<Event> groupEvents;
+
+        [ObservableProperty]
+        private Button dynamicGroupButton;
+
+        [ObservableProperty]
+        private Visibility newEventButtonVisibility = Visibility.Hidden;        
 
         [ObservableProperty]
         private string eventTitle = "";
@@ -47,6 +57,8 @@ namespace EventManagementSystemUI.ViewModels
             Events = new ObservableCollection<EventManagementSystem.Models.Event>();
             FutureEvents = new ObservableCollection<EventManagementSystem.Models.Event>();
             Groups = new ObservableCollection<EventManagementSystem.Models.Group>();
+            GroupEvents = new ObservableCollection<EventManagementSystem.Models.Event>();
+            LoadEventsCommand.Execute(null);
             LoadGroupsCommand.Execute(null);
         }
 
@@ -111,6 +123,89 @@ namespace EventManagementSystemUI.ViewModels
         }
 
         [RelayCommand]
+        private async Task LoadGroupEvents(int groupId)
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine($"Loading events for group {groupId}..."); // for debugging
+                var events = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Event>>($"Event/Group/{groupId}");
+                if (events != null)
+                {
+                    GroupEvents.Clear();
+                    foreach (var evt in events)
+                    {
+                        GroupEvents.Add(evt); // each event is added to the ObservableCollection
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("No group events loaded."); // for debugging
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in LoadGroupEvents: {ex.Message}"); // for debugging
+                MessageBox.Show($"Error loading group events: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        [RelayCommand]
+        private void OnGroupSelected()
+        {
+            if (SelectedGroup != null)
+            {
+                NavigateCommand.Execute("GroupDetails");
+            }
+        }
+
+        private void AddDynamicButton()
+        {
+            if (SelectedGroup != null && DynamicGroupButton == null)
+            {
+                DynamicGroupButton = new Button
+                {
+                    Content = SelectedGroup.Name,
+                    Command = new RelayCommand(() => Navigate("GroupDetails")),
+                    DataContext = this
+                };
+                var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+                if (frame != null)
+                {
+                    var button = new Button
+                    {
+                        Content = "Group Details",
+                        Margin = new Thickness(5),
+                        Padding = new Thickness(10, 5, 10, 5),
+                        Style = (Style)Application.Current.Resources["MaterialDesignRaisedButton"],
+                        Background = System.Windows.Media.Brushes.Red,
+                        Foreground = System.Windows.Media.Brushes.White,
+                        Command = NavigateCommand,
+                        CommandParameter = "GroupDetails",
+                        DataContext = this
+                    };
+                    var stackPanel = Application.Current.MainWindow.FindName("MainButtonPanel") as StackPanel;
+                    if (stackPanel != null)
+                    {
+                        stackPanel.Children.Add(DynamicGroupButton);
+                    }
+                }
+            }
+        }
+
+        private void RemoveDynamicButton()
+        {
+            if (DynamicGroupButton != null)
+            {
+                var stackPanel = Application.Current.MainWindow.FindName("MainButtonPanel") as StackPanel;
+                if (stackPanel != null)
+                {
+                    stackPanel.Children.Remove(DynamicGroupButton);
+                    DynamicGroupButton = null;
+                }
+            }
+        }
+
+        [RelayCommand]
         private void Navigate(string page)
         {
             var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
@@ -133,6 +228,14 @@ namespace EventManagementSystemUI.ViewModels
                 case "NewEvent":
                     frame.Content = new NewEvent { DataContext = this };
                     NewEventButtonVisibility = Visibility.Visible;
+                    break;
+                case "GroupDetails":
+                    if (SelectedGroup != null)
+                    {
+                        frame.Content = new GroupDetailsView { DataContext = this };
+                        AddDynamicButton();
+                        LoadGroupEvents(SelectedGroup.Id).ConfigureAwait(false);
+                    }
                     break;
             }
         }
