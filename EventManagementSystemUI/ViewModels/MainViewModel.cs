@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using EventManagementSystem.Models;
 using EventManagementSystemUI.Views;
-using EventManagementSystem.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json; 
@@ -22,9 +21,9 @@ namespace EventManagementSystemUI.ViewModels
         [ObservableProperty]
         private ObservableCollection<EventManagementSystem.Models.Group> groups;
 
-        [ObservableProperty]
-        private ObservableCollection<EventManagementSystem.Models.Group> groups;
         public ObservableCollection<Group> SelectedGroups { get; set; } = new();
+
+        [ObservableProperty]
         private Group selectedGroup;
 
         [ObservableProperty]
@@ -131,7 +130,7 @@ namespace EventManagementSystemUI.ViewModels
             try
             {
                 System.Diagnostics.Debug.WriteLine($"Loading events for group {groupId}..."); // for debugging
-                var events = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Event>>($"Event/Group/{groupId}");
+                var events = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Event>>($"Group/{groupId}/events");
                 if (events != null)
                 {
                     GroupEvents.Clear();
@@ -218,19 +217,24 @@ namespace EventManagementSystemUI.ViewModels
             {
                 case "Dashboard":
                     frame.Content = new DashboardView { DataContext = this };
+                    RemoveDynamicButton();
                     break;
                 case "Events":
                     frame.Content = new EventManagementView { DataContext = this };
+                    RemoveDynamicButton();
                     break;
                 case "Groups":
                     frame.Content = new GroupManagementView { DataContext = this };
+                    RemoveDynamicButton();
                     break;
                 case "Profile":
                     frame.Content = new ProfileView { DataContext = this };
+                    RemoveDynamicButton();
                     break;
                 case "NewEvent":
                     frame.Content = new NewEvent { DataContext = this };
                     NewEventButtonVisibility = Visibility.Visible;
+                    RemoveDynamicButton();  
                     break;
                 case "GroupDetails":
                     if (SelectedGroup != null)
