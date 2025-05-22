@@ -20,6 +20,21 @@ namespace EventManagementSystemUI.ViewModels
         [ObservableProperty]
         private Visibility newEventButtonVisibility = Visibility.Hidden;
 
+        [ObservableProperty]
+        private string eventTitle = "";
+
+        [ObservableProperty]
+        private string eventDescription = "";
+
+        [ObservableProperty]
+        private DateTime? eventStartDateTime;
+
+        [ObservableProperty]
+        private DateTime? eventEndDateTime;
+
+        [ObservableProperty]
+        private string eventLocation = "";
+
         private readonly HttpClient _httpClient;
 
         public MainViewModel()
@@ -85,23 +100,100 @@ namespace EventManagementSystemUI.ViewModels
                     break;
                 case "NewEvent":
                     frame.Content = new NewEvent { DataContext = this };
+                    NewEventButtonVisibility = Visibility.Visible;
                     break;
             }
         }
 
+        //[RelayCommand]
+        //private void NewEvent()
+        //{
+        //    var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+        //    if (frame != null && frame.Content is NewEvent)
+        //    {
+        //        // 
+        //    }
+        //}
+
         [RelayCommand]
-        private void NewEvent()
+        private void ShowNewEvent()
         {
-                NewEventButtonVisibility = Visibility.Visible;
-                var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-                frame.Content = new NewEvent { DataContext = this };
-        }
-        [RelayCommand]
-        private void HideNewEvent()
-        {
-            NewEventButtonVisibility = Visibility.Collapsed;
             var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-            frame.Content = new EventManagementView { DataContext = this };
+            if (frame != null)
+            {
+                frame.Content = new NewEvent { DataContext = this };
+                NewEventButtonVisibility = Visibility.Visible;
+            }
         }
+
+        //[RelayCommand]
+        //private void HideNewEvent()
+        //{
+        //    NewEventButtonVisibility = Visibility.Collapsed;
+        //    var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+        //    frame.Content = new EventManagementView { DataContext = this };
+        //}
+
+        [RelayCommand]
+        private async Task SubmitNewEvent()
+        {
+
+            if (string.IsNullOrWhiteSpace(EventTitle) || EventTitle == "Enter Title" ||
+                string.IsNullOrWhiteSpace(EventDescription) || EventDescription == "Enter Description" ||
+                EventEndDateTime == null ||
+                string.IsNullOrWhiteSpace(EventLocation) || EventLocation == "Enter Location")
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var startDateUtc = EventStartDateTime.Value.ToUniversalTime();
+            var endDateUtc = EventEndDateTime.Value.ToUniversalTime();
+
+            var newEvent = new EventManagementSystem.Models.Event
+            {
+                Title = EventTitle,
+                Description = EventDescription,
+                StartDate = startDateUtc,
+                EndDate = endDateUtc,
+                Location = EventLocation
+            };
+
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("Event", newEvent);
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Event created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await LoadEvents();
+                    CancelNewEventCommand.Execute(null);
+                }
+                else
+                {
+                    MessageBox.Show($"Failed to create event: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error submitting event: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        [RelayCommand]
+        private void CancelNewEvent()
+        {
+            NewEventButtonVisibility = Visibility.Hidden; 
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            if (frame != null)
+            {
+                frame.Content = new EventManagementView { DataContext = this };
+                EventTitle = "";
+                EventDescription = "";
+                EventStartDateTime = null;
+                EventEndDateTime = null;
+                EventLocation = "";
+            }
+        }
+
     }
 }
