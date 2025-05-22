@@ -16,7 +16,7 @@
         </Grid.ColumnDefinitions>
         <!-- Sidebar -->
         <materialDesign:Card Grid.Column="0" Background="{DynamicResource MaterialDesignPaper}">
-            <StackPanel Margin="10">
+            <StackPanel x:Name="MainButtonPanel" Margin="10">
                 <Button Content="Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Margin="5" />
                 <Button Content="Events" Command="{Binding NavigateCommand}" CommandParameter="Events" Margin="5" />
                

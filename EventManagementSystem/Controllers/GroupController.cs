@@ -31,5 +31,22 @@ public class GroupController : ControllerBase
         var groups = await _context.Groups.ToListAsync();
         return Ok(groups);
     }
+
+    [HttpGet("{id}/events")]
+    public async Task<ActionResult<IEnumerable<Event>>> GetEventsByGroup(int id)
+    {
+        var group = await _context.Groups
+            .Include(g => g.EventGroups)
+            .ThenInclude(eg => eg.Event)
+            .FirstOrDefaultAsync(g => g.Id == id);
+
+        if (group == null)
+        {
+            return NotFound();
+        }
+
+        var events = group.EventGroups.Select(eg => eg.Event).ToList();
+        return Ok(events);
+    }
 }
 
