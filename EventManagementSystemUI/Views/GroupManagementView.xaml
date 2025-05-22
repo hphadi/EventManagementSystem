@@ -4,11 +4,14 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="Manage Groups" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Margin="10" />
-            <ListView Height="400">
+            <TextBlock Text="Manage Groups" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Margin="10" 
+                       materialDesign:ElevationAssist.Elevation="Dp2"/>
+            <ListView Height="400" ItemsSource="{Binding Groups}">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" Width="150" />
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="150" />
+                        <GridViewColumn Header="City" DisplayMemberBinding="{Binding City}" Width="150" />
+                        <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" Width="200" />
                     </GridView>
                 </ListView.View>
             </ListView>

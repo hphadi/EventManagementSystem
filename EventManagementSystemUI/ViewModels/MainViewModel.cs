@@ -21,6 +21,9 @@ namespace EventManagementSystemUI.ViewModels
         private Visibility newEventButtonVisibility = Visibility.Hidden;
 
         [ObservableProperty]
+        private ObservableCollection<EventManagementSystem.Models.Group> groups;
+
+        [ObservableProperty]
         private string eventTitle = "";
 
         [ObservableProperty]
@@ -43,7 +46,8 @@ namespace EventManagementSystemUI.ViewModels
             _httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5144/api/") };
             Events = new ObservableCollection<EventManagementSystem.Models.Event>();
             FutureEvents = new ObservableCollection<EventManagementSystem.Models.Event>();
-            LoadEventsCommand.Execute(null);
+            Groups = new ObservableCollection<EventManagementSystem.Models.Group>();
+            LoadGroupsCommand.Execute(null);
         }
 
         [RelayCommand]
@@ -75,6 +79,34 @@ namespace EventManagementSystemUI.ViewModels
             {
                 System.Diagnostics.Debug.WriteLine($"Error in LoadEvents: {ex.Message}"); // for debugging
                 MessageBox.Show($"Error loading events: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        [RelayCommand]
+        private async Task LoadGroups()
+        {
+            try
+            {
+                System.Diagnostics.Debug.WriteLine("Loading groups..."); // for debugging
+                var groups = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Group>>("Group");
+                if (groups != null)
+                {
+                    Groups.Clear();
+                    foreach (var group in groups)
+                    {
+                        Groups.Add(group); // each group is added to the ObservableCollection
+
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("No groups loaded."); // for debugging
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error in LoadGroups: {ex.Message}"); // for debugging
+                MessageBox.Show($"Error loading groups: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -140,7 +172,7 @@ namespace EventManagementSystemUI.ViewModels
 
             if (string.IsNullOrWhiteSpace(EventTitle) || EventTitle == "Enter Title" ||
                 string.IsNullOrWhiteSpace(EventDescription) || EventDescription == "Enter Description" ||
-                EventEndDateTime == null ||
+                EventEndDateTime == null || EventStartDateTime == null ||
                 string.IsNullOrWhiteSpace(EventLocation) || EventLocation == "Enter Location")
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
