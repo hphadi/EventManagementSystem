@@ -28,6 +28,8 @@ namespace EventManagementSystemUI.ViewModels
         [ObservableProperty]
         private NewEventDto newEventDraft = new();
 
+//        [ObservableProperty]
+//        private DateTime? eventEndDateTime;
 
         [ObservableProperty]
         private ObservableCollection<EventManagementSystem.Models.Group>? selectedGroups;
@@ -56,6 +58,16 @@ namespace EventManagementSystemUI.ViewModels
                 GroupIds = SelectedGroups.IsNullOrEmpty()? null : SelectedGroups.Select(g => g.Id).ToList()
             };
 
+//            var newEvent = new EventManagementSystem.Models.EventDto
+//            {
+//                Title = EventTitle,
+//                Description = EventDescription,
+//                StartDate = startDateUtc,
+//                EndDate = endDateUtc,
+//                Location = EventLocation,
+//                CreatedAt = DateTime.Now.ToUniversalTime(),
+//                GroupIds = SelectedGroups.Select(g => g.Id).ToList()
+//            };
 
             try
             {

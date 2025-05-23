@@ -89,7 +89,7 @@ namespace EventManagementSystemUI.ViewModels
             //{
             //    frame.Content = new NewEvent { DataContext = _vm };
             //    ChangeVisibility("NewEvent", true);
-            //}
+//}
         }
 
         [RelayCommand]
