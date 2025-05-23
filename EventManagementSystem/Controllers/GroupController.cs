@@ -32,21 +32,63 @@ public class GroupController : ControllerBase
         return Ok(groups);
     }
 
-    [HttpGet("{id}/events")]
-    public async Task<ActionResult<IEnumerable<Event>>> GetEventsByGroup(int id)
+    //[HttpGet("{id}/events")]
+    //public async Task<ActionResult<IEnumerable<Event>>> GetEventsByGroup(int id)
+    //{
+    //    var group = await _context.Groups
+    //        .Where(g => g.Id == id)
+    //        .Select(g => new {
+    //            g.Id,
+    //            g.Name,
+    //            EventGroups = g.EventGroups.Select(eg => new {
+    //                eg.EventId,
+    //                Event = new
+    //                {
+    //                    eg.Event.Id,
+    //                    eg.Event.Title,
+    //                    eg.Event.StartDate
+    //                }
+    //            })
+    //        })
+    //        .FirstOrDefaultAsync();
+
+    //    if (group == null)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    var events = group.EventGroups.Select(eg => eg.Event).ToList();
+    //    return Ok(events);
+    //}
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<GroupWithEventsDto>> GetGroupDetails(int id)
     {
         var group = await _context.Groups
-            .Include(g => g.EventGroups)
-            .ThenInclude(eg => eg.Event)
-            .FirstOrDefaultAsync(g => g.Id == id);
+            .Where(g => g.Id == id)
+            .Select(g => new GroupWithEventsDto
+            {
+                Id = g.Id,
+                Name = g.Name,
+                City = g.City,
+                Description = g.Description,
+                Events = g.EventGroups
+                    .Select(eg => new SimpleEventDto
+                    {
+                        Id = eg.Event.Id,
+                        Title = eg.Event.Title,
+                        StartDate = eg.Event.StartDate
+                    }).ToList()
+            })
+            .FirstOrDefaultAsync();
 
         if (group == null)
         {
             return NotFound();
         }
 
-        var events = group.EventGroups.Select(eg => eg.Event).ToList();
-        return Ok(events);
+        return Ok(group);
     }
+
 }
 

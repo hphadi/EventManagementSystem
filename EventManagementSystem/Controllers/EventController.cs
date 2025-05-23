@@ -20,7 +20,7 @@ public class EventController : ControllerBase
 
     // get all Events
     [HttpGet]
-    public async Task<ActionResult<List<Event>>> GetEvents()
+    public async Task<ActionResult<List<EventBase>>> GetEvents()
     {
         try
         {
@@ -64,38 +64,60 @@ public class EventController : ControllerBase
 
             await _context.SaveChangesAsync();
         }
-        
-        return Ok(newEvent);
-    }
-    public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
-    {
-        _context.Events.Add(newEvent);
-        await _context.SaveChangesAsync();
-        return Ok(newEvent);
-    }
 
-    // get Event with ID
+        return Ok(newEvent);
+    }
+    //public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
+    //{
+    //    _context.Events.Add(newEvent);
+    //    await _context.SaveChangesAsync();
+    //    return Ok(newEvent);
+    //}
+
+    //get Event with ID
     [HttpGet("{id}")]
-    public async Task<ActionResult<Event>> GetEvent(int id)
+    public async Task<ActionResult<EventWithGroupsDto>> GetEventDetails(int id)
     {
-        var eventEntity = await _context.Events
-            .Include(e => e.EventGroups)
-            .ThenInclude(eg => eg.Group)
-            .FirstOrDefaultAsync(e => e.Id == id);
-        if (eventEntity == null) return NotFound();
-        return eventEntity;
+        var ev = await _context.Events
+            .Where(e => e.Id == id)
+            .Select(e => new EventWithGroupsDto
+            {
+                Id = e.Id,
+                Title = e.Title,
+                Description = e.Description,
+                StartDate = e.StartDate,
+                EndDate = e.EndDate,
+                CreatedAt = e.CreatedAt,
+                Location = e.Location,
+                Groups = e.EventGroups
+                    .Select(eg => new SimpleGroupDto
+                    {
+                        Id = eg.Group.Id,
+                        Name = eg.Group.Name,
+                        City = eg.Group.City
+                    }).ToList()
+            })
+            .FirstOrDefaultAsync();
+
+        if (ev == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(ev);
     }
 
-    // assign Event to Group
-    [HttpPost("{eventId}/assign-group/{groupId}")]
-    public async Task<IActionResult> AssignEventToGroup(int eventId, int groupId)
-    {
-        var eventEntity = await _context.Events.FindAsync(eventId);
-        var group = await _context.Groups.FindAsync(groupId);
-        if (eventEntity == null || group == null) return NotFound();
 
-        //_context.EventGroups.Add(new EventGroup { EventId = eventId, GroupId = groupId });
-        await _context.SaveChangesAsync();
-        return NoContent();
-    }
+    //// assign Event to Group
+    //[HttpPost("{eventId}/assign-group/{groupId}")]
+    //public async Task<IActionResult> AssignEventToGroup(int eventId, int groupId)
+    //{
+    //    var eventEntity = await _context.Events.FindAsync(eventId);
+    //    var group = await _context.Groups.FindAsync(groupId);
+    //    if (eventEntity == null || group == null) return NotFound();
+
+    //    //_context.EventGroups.Add(new EventGroup { EventId = eventId, GroupId = groupId });
+    //    await _context.SaveChangesAsync();
+    //    return NoContent();
+    //}
 }

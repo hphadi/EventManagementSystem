@@ -1,6 +1,8 @@
-﻿using System;
+﻿using EventManagementSystemUI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,9 +22,20 @@ namespace EventManagementSystemUI.Views
     /// </summary>
     public partial class GroupDetailsView : UserControl
     {
+        //public GroupDetailsViewModel GroupDetailsVM { get; set; }
+
         public GroupDetailsView()
         {
             InitializeComponent();
+        }
+
+        private void ListView_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (sender is ListView listView && listView.SelectedItem != null)
+            {
+                var vm = DataContext as GroupDetailsViewModel;
+                vm.EventSelectedCommand.Execute(null);
+            }
         }
     }
 }

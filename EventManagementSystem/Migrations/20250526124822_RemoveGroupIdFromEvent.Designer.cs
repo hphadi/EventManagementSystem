@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EventManagementSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250519060629_MigrationEventManagementSystem")]
-    partial class MigrationEventManagementSystem
+    [Migration("20250526124822_RemoveGroupIdFromEvent")]
+    partial class RemoveGroupIdFromEvent
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,12 +33,18 @@ namespace EventManagementSystem.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -52,6 +58,8 @@ namespace EventManagementSystem.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Events");
                 });
@@ -79,6 +87,14 @@ namespace EventManagementSystem.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -86,21 +102,6 @@ namespace EventManagementSystem.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("EventManagementSystem.Models.GroupMember", b =>
-                {
-                    b.Property<int>("GroupId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("GroupId", "PersonId");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("GroupMembers");
                 });
 
             modelBuilder.Entity("EventManagementSystem.Models.Person", b =>
@@ -114,12 +115,17 @@ namespace EventManagementSystem.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
@@ -129,10 +135,17 @@ namespace EventManagementSystem.Migrations
                     b.ToTable("People");
                 });
 
+            modelBuilder.Entity("EventManagementSystem.Models.Event", b =>
+                {
+                    b.HasOne("EventManagementSystem.Models.Group", null)
+                        .WithMany("Events")
+                        .HasForeignKey("GroupId");
+                });
+
             modelBuilder.Entity("EventManagementSystem.Models.EventGroup", b =>
                 {
                     b.HasOne("EventManagementSystem.Models.Event", "Event")
-                        .WithMany("EventGroups")
+                        .WithMany()
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -148,40 +161,11 @@ namespace EventManagementSystem.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("EventManagementSystem.Models.GroupMember", b =>
-                {
-                    b.HasOne("EventManagementSystem.Models.Group", "Group")
-                        .WithMany("GroupMembers")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventManagementSystem.Models.Person", "Person")
-                        .WithMany("GroupMembers")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("EventManagementSystem.Models.Event", b =>
-                {
-                    b.Navigation("EventGroups");
-                });
-
             modelBuilder.Entity("EventManagementSystem.Models.Group", b =>
                 {
                     b.Navigation("EventGroups");
 
-                    b.Navigation("GroupMembers");
-                });
-
-            modelBuilder.Entity("EventManagementSystem.Models.Person", b =>
-                {
-                    b.Navigation("GroupMembers");
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

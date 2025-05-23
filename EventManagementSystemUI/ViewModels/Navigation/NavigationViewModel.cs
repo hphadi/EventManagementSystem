@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using EventManagementSystemUI.Views;
+using System.Net.Http.Json;
 
 namespace EventManagementSystemUI.ViewModels
 {
@@ -51,9 +52,9 @@ namespace EventManagementSystemUI.ViewModels
                 case "Groups":
                     frame.Content = new GroupManagementView { DataContext = _vm };
                     break;
-                case "GroupDetails":
-                    frame.Content = new GroupDetailsView { DataContext = _vm };
-                    break;
+                //case "GroupDetails":
+                //    frame.Content = new GroupDetailsView { DataContext = _vm };
+                //    break;
                 case "Profile":
                     frame.Content = new ProfileView { DataContext = _vm };
                     break;
@@ -67,6 +68,35 @@ namespace EventManagementSystemUI.ViewModels
                     frame.Content = new SignIn { DataContext = _vm };
                     break;
             }
+        }
+
+        [RelayCommand]
+        public void GroupDetails(string groupId)
+        {
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            var Vm = new EventManagementSystemUI.ViewModels.GroupDetailsViewModel(_httpClient, _vm, groupId);
+            frame.Content = new GroupDetailsView { DataContext = Vm};
+        }
+
+        [RelayCommand]
+        public void EventDetails(string eventId)
+        {
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            var Vm = new EventManagementSystemUI.ViewModels.EventDetailsViewModel(_httpClient, _vm, eventId);
+            frame.Content = new EventDetailsView { DataContext = Vm };
+        }
+
+        [RelayCommand]
+        public void AddEventToMenu(EventManagementSystem.Models.EventBase _event)
+        {
+            _vm.NavVM.DynamicButtons.Add(new NavigationButton
+            {
+                Id = "e" + _event.Id,
+                Title = _event.Title,
+                CommandParameter = _event.Id.ToString(),
+                Command = _vm.NavVM.EventDetailsCommand
+            });
+            _vm.NavVM.EventDetails(_event.Id.ToString());
         }
 
         public NavigationButton? GetButtonById(string id)
@@ -89,7 +119,7 @@ namespace EventManagementSystemUI.ViewModels
             //{
             //    frame.Content = new NewEvent { DataContext = _vm };
             //    ChangeVisibility("NewEvent", true);
-            //}
+//}
         }
 
         [RelayCommand]

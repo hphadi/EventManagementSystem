@@ -11,7 +11,6 @@ namespace EventManagementSystemUI.ViewModels
         public NewEventViewModel NewEventVM { get; }
         public EventDetailsViewModel EventDetailsVM { get; }
         public GroupViewModel GroupVM { get; }
-        public GroupDetailsViewModel GroupDetailsVM { get; }
         public NavigationViewModel NavVM { get; }
         public UserViewModel UserVM { get; }
 
@@ -57,9 +56,9 @@ namespace EventManagementSystemUI.ViewModels
             
             EventVM = new EventManagementSystemUI.ViewModels.EventViewModel(_httpClient, this);
             NewEventVM = new EventManagementSystemUI.ViewModels.NewEventViewModel(_httpClient, this);
-            EventDetailsVM = new EventManagementSystemUI.ViewModels.EventDetailsViewModel(_httpClient, this);
+            //EventDetailsVM = new EventManagementSystemUI.ViewModels.EventDetailsViewModel(_httpClient, this);
             GroupVM = new EventManagementSystemUI.ViewModels.GroupViewModel(_httpClient, this);
-            GroupDetailsVM = new EventManagementSystemUI.ViewModels.GroupDetailsViewModel(_httpClient, this);
+            //GroupDetailsVM = new EventManagementSystemUI.ViewModels.GroupDetailsViewModel(_httpClient, this);
             NavVM = new EventManagementSystemUI.ViewModels.NavigationViewModel(_httpClient, this);
             UserVM = new EventManagementSystemUI.ViewModels.UserViewModel(_httpClient, this);
             

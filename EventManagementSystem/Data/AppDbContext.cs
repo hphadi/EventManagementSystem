@@ -13,6 +13,35 @@ public class AppDbContext : DbContext
     public DbSet<EventGroup> EventGroups { get; set; }
     //public DbSet<GroupMember> GroupMembers { get; set; }
 
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
+    //    modelBuilder.Entity<EventGroup>()
+    //    .HasKey(eg => new { eg.EventId, eg.GroupId });
+
+    //    //modelBuilder.Entity<EventGroup>()
+    //    //    .HasOne(eg => eg.Event)
+    //    //    .WithMany(e => e.EventGroups)
+    //    //    .HasForeignKey(eg => eg.EventId);
+
+    //    modelBuilder.Entity<EventGroup>()
+    //        .HasOne(eg => eg.Group)
+    //        .WithMany(g => g.EventGroups)
+    //        .HasForeignKey(eg => eg.GroupId);
+
+    //    //modelBuilder.Entity<GroupMember>()
+    //    //    .HasKey(gm => new { gm.GroupId, gm.PersonId });
+
+    //    //modelBuilder.Entity<GroupMember>()
+    //    //    .HasOne(gm => gm.Group)
+    //    //    .WithMany(g => g.GroupMembers)
+    //    //    .HasForeignKey(gm => gm.GroupId);
+
+    //    //modelBuilder.Entity<GroupMember>()
+    //    //    .HasOne(gm => gm.Person)
+    //    //    .WithMany(p => p.GroupMembers)
+    //    //    .HasForeignKey(gm => gm.PersonId);
+    //}
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<EventGroup>()
@@ -27,18 +56,5 @@ public class AppDbContext : DbContext
             .HasOne(eg => eg.Group)
             .WithMany(g => g.EventGroups)
             .HasForeignKey(eg => eg.GroupId);
-
-        //modelBuilder.Entity<GroupMember>()
-        //    .HasKey(gm => new { gm.GroupId, gm.PersonId });
-
-        //modelBuilder.Entity<GroupMember>()
-        //    .HasOne(gm => gm.Group)
-        //    .WithMany(g => g.GroupMembers)
-        //    .HasForeignKey(gm => gm.GroupId);
-
-        //modelBuilder.Entity<GroupMember>()
-        //    .HasOne(gm => gm.Person)
-        //    .WithMany(p => p.GroupMembers)
-        //    .HasForeignKey(gm => gm.PersonId);
     }
 }

@@ -6,36 +6,43 @@
                xmlns:local="clr-namespace:EventManagementSystemUI.Views"
             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-            xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+            xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels" d:DataContext="{d:DesignInstance Type=vm:GroupDetailsViewModel}"
                mc:Ignorable="d"
             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Margin="20">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <StackPanel Grid.Row="0" Margin="0,0,0,20" materialDesign:ElevationAssist.Elevation="Dp2">
+        <DockPanel>
+            <TextBlock Text="{Binding SelectedGroup.Name}" 
+                   Style="{StaticResource MaterialDesignHeadline4TextBlock}" 
+                   Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,10,0"
+                   DockPanel.Dock="Left"/>
+            <Button Content="Close" 
+                Command="{Binding CloseCommand}" 
+                DockPanel.Dock="Right" 
+                ToolTip="Close"
+                Style="{StaticResource MaterialDesignFlatButton}" 
+                Foreground="Red" 
+                HorizontalAlignment="Right" 
+                />
+        </DockPanel>
         <!-- Groups Info -->
         <StackPanel Grid.Row="0" Margin="0,0,0,20" materialDesign:ElevationAssist.Elevation="Dp2">
-            <TextBlock Text="{Binding GroupDetailsVM.SelectedGroup.Name}" Style="{StaticResource MaterialDesignHeadline4TextBlock}" 
-                       Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,10"/>
-            <TextBlock Text="{Binding GroupDetailsVM.SelectedGroup.City}" Style="{StaticResource MaterialDesignBody1TextBlock}" 
+            <TextBlock Text="{Binding SelectedGroup.City}" Style="{StaticResource MaterialDesignBody1TextBlock}" 
                        Foreground="{DynamicResource MaterialDesignBody}"/>
-            <TextBlock Text="{Binding GroupDetailsVM.SelectedGroup.Description}" Style="{StaticResource MaterialDesignBody1TextBlock}" 
+            <TextBlock Text="{Binding SelectedGroup.Description}" Style="{StaticResource MaterialDesignBody1TextBlock}" 
                        Foreground="{DynamicResource MaterialDesignBody}" TextWrapping="Wrap"/>
         </StackPanel>
         
         <!-- Events List -->
-        <ListView Grid.Row="1" ItemsSource="{Binding GroupDetailsVM.GroupEvents}" Height="300">
+        <ListView Grid.Row="1" ItemsSource="{Binding SelectedGroup.Events}" Height="300" SelectedItem="{Binding SelectedEvent, Mode=TwoWay}" MouseDoubleClick="ListView_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="200"/>
                     <GridViewColumn Header="Start Date" DisplayMemberBinding="{Binding StartDate, StringFormat=dd/MM/yyyy HH:mm}" Width="150"/>
-                    <GridViewColumn Header="End Date" DisplayMemberBinding="{Binding EndDate, StringFormat=dd/MM/yyyy HH:mm}" Width="150"/>
                     <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" Width="200"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        
 
-    </Grid>
+
+    </StackPanel>
 </UserControl>

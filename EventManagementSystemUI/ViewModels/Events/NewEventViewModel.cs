@@ -16,8 +16,8 @@ namespace EventManagementSystemUI.ViewModels
         private readonly HttpClient _httpClient;
         private readonly MainViewModel _vm;
 
-        public ObservableCollection<Event> Events { get; } = new();
-        public ObservableCollection<Event> FutureEvents { get; } = new();
+        public ObservableCollection<EventBase> Events { get; } = new();
+        public ObservableCollection<EventBase> FutureEvents { get; } = new();
 
         public NewEventViewModel(HttpClient httpClient, MainViewModel vm)
         {
@@ -28,9 +28,11 @@ namespace EventManagementSystemUI.ViewModels
         [ObservableProperty]
         private NewEventDto newEventDraft = new();
 
+//        [ObservableProperty]
+//        private DateTime? eventEndDateTime;
 
         [ObservableProperty]
-        private ObservableCollection<EventManagementSystem.Models.Group>? selectedGroups;
+        private ObservableCollection<EventManagementSystem.Models.GroupBase>? selectedGroups;
 
         [RelayCommand]
         private async Task SubmitNewEvent()
@@ -56,6 +58,16 @@ namespace EventManagementSystemUI.ViewModels
                 GroupIds = SelectedGroups.IsNullOrEmpty()? null : SelectedGroups.Select(g => g.Id).ToList()
             };
 
+//            var newEvent = new EventManagementSystem.Models.EventDto
+//            {
+//                Title = EventTitle,
+//                Description = EventDescription,
+//                StartDate = startDateUtc,
+//                EndDate = endDateUtc,
+//                Location = EventLocation,
+//                CreatedAt = DateTime.Now.ToUniversalTime(),
+//                GroupIds = SelectedGroups.Select(g => g.Id).ToList()
+//            };
 
             try
             {

@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EventManagementSystemUI.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -19,10 +20,10 @@ namespace EventManagementSystemUI.ViewModels
         }
 
         [ObservableProperty]
-        private ObservableCollection<EventManagementSystem.Models.Group> groups;
+        private ObservableCollection<EventManagementSystem.Models.GroupBase> groups = [];
 
         [ObservableProperty]
-        private EventManagementSystem.Models.Group selectedGroup;
+        private EventManagementSystem.Models.GroupBase selectedGroup;
 
         [RelayCommand]
         private async Task LoadGroups()
@@ -30,10 +31,11 @@ namespace EventManagementSystemUI.ViewModels
             try
             {
                 System.Diagnostics.Debug.WriteLine("Loading groups..."); // for debugging
-                var groups_loaded = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Group>>("Group");
+                var groups_loaded = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.GroupBase>>("Group");
                 if (groups_loaded != null)
                 {
                     groups.Clear();
+                    
                     foreach (var group in groups_loaded)
                     {
                         groups.Add(group); // each group is added to the ObservableCollection
@@ -52,5 +54,14 @@ namespace EventManagementSystemUI.ViewModels
             }
         }
 
+        [RelayCommand]
+        private async Task GroupSelected()
+        {
+            var group = _vm.GroupVM.selectedGroup;
+            //Add Button
+            _vm.NavVM.DynamicButtons.Add(new NavigationButton { Id = "g"+group.Id, Title = group.Name, CommandParameter = group.Id.ToString(), Command = _vm.NavVM.GroupDetailsCommand });
+            //Navigate to Page
+            _vm.NavVM.GroupDetails(group.Id.ToString());
+        }
     }
 }

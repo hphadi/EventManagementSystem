@@ -11,44 +11,30 @@ namespace EventManagementSystemUI.ViewModels
     public partial class EventDetailsViewModel : ObservableObject
     {
         private readonly HttpClient _httpClient;
-        MainViewModel _vm;
-        //private readonly Action<object> _navigateAction; 
+        private readonly MainViewModel _vm;
+        private readonly string Id;
 
-        [ObservableProperty]
-        private Event selectedEvent;
-
-        [ObservableProperty]
-        private ObservableCollection<Group> eventGroups;
-
-        public EventDetailsViewModel(HttpClient httpClient, MainViewModel vm)
+        public EventDetailsViewModel(HttpClient httpClient, MainViewModel vm, string id)
         {
             _httpClient = httpClient;
             _vm = vm;
-            
-            EventGroups = new ObservableCollection<Group>();
+            Id = id;
+            LoadEventDetailsCommand.Execute(Int32.Parse(Id));
         }
 
+        [ObservableProperty]
+        private EventManagementSystem.Models.EventWithGroupsDto selectedEvent = new();
+
         [RelayCommand]
-        public async Task LoadEventDetails(int eventId)
+        private async Task LoadEventDetails(int eventId)
         {
-            try
-            {
-                var evt = await _httpClient.GetFromJsonAsync<Event>($"Event/{eventId}");
-                if (evt != null)
-                {
-                    SelectedEvent = evt;
-                    EventGroups.Clear();
-                    foreach (var eventGroup in evt.EventGroups)
-                    {
-                        EventGroups.Add(eventGroup.Group);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error in LoadEventDetails: {ex.Message}");
-                MessageBox.Show($"Error loading event details: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            SelectedEvent = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.EventWithGroupsDto>($"event/{eventId}");
+        }
+        [RelayCommand]
+        private async Task Close()
+        {
+            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "e" + Id));
+            _vm.NavVM.NavigateCommand.Execute("Events");
         }
 
         //[RelayCommand]

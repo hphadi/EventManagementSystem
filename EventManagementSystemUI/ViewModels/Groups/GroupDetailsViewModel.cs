@@ -4,6 +4,7 @@ using EventManagementSystem.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace EventManagementSystemUI.ViewModels
@@ -12,51 +13,39 @@ namespace EventManagementSystemUI.ViewModels
     {
         private readonly HttpClient _httpClient;
         private readonly MainViewModel _vm;
+        private readonly string Id;
 
-        public GroupDetailsViewModel(HttpClient httpClient, MainViewModel vm)
+        public GroupDetailsViewModel(HttpClient httpClient, MainViewModel vm, string id)
         {
             _httpClient = httpClient;
             _vm = vm;
+            Id =  id;
+            LoadGroupDetailsCommand.Execute(Int32.Parse(Id));
         }
 
         [ObservableProperty]
-        private Group selectedGroup;
+        private EventManagementSystem.Models.GroupWithEventsDto selectedGroup = new();
 
         [ObservableProperty]
-        private ObservableCollection<Event> groupEvents = new ObservableCollection<EventManagementSystem.Models.Event>();
+        private EventManagementSystem.Models.Event selectedEvent;
+
 
         [RelayCommand]
-        private async Task LoadGroupEvents(int groupId)
+        private async Task LoadGroupDetails(int groupId)
         {
-            try
-            {
-                System.Diagnostics.Debug.WriteLine($"Loading events for group {groupId}...");
-                var url = $"Group/{groupId}/events";
-                System.Diagnostics.Debug.WriteLine($"Requesting URL: {_httpClient.BaseAddress}{url}");
-                var response = await _httpClient.GetAsync(url);
-                System.Diagnostics.Debug.WriteLine($"Response Status: {response.StatusCode}");
-                var events = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Event>>(url);
-                if (events != null)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Loaded {events.Count} events.");
-                    GroupEvents.Clear();
-                    foreach (var evt in events)
-                    {
-                        GroupEvents.Add(evt);
-                    }
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("No group events loaded.");
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error in LoadGroupEvents: {ex.Message}");
-                MessageBox.Show($"Error loading group events: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            SelectedGroup = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.GroupWithEventsDto>($"group/{groupId}");
         }
-
-
+        [RelayCommand]
+        private async Task Close()
+        {
+            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "g" + Id));
+            _vm.NavVM.NavigateCommand.Execute("Groups");
+        }
+        [RelayCommand]
+        private async Task EventSelected()
+        {
+            var _event = SelectedEvent;
+            _vm.NavVM.AddEventToMenu(_event);
+        }
     }
 }
