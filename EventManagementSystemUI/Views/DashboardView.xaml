@@ -23,7 +23,7 @@
           <materialDesign:Card Grid.Column="0" Margin="0,0,10,0">
               <StackPanel>
                   <TextBlock Text="Upcoming Events" Style="{DynamicResource MaterialDesignHeadline6TextBlock}" Margin="10" />
-                    <ListView ItemsSource="{Binding FutureEvents}" Height="400">
+                    <ListView x:Name="UpcomingEventsList" ItemsSource="{Binding FutureEvents}" Height="400" MouseDoubleClick="ListView_MouseDoubleClick">
                       <ListView.View>
                           <GridView>
                               <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="150" />

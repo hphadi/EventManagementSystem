@@ -8,7 +8,7 @@
           xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
              mc:Ignorable="d"
           d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

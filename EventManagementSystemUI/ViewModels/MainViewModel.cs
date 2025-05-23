@@ -4,7 +4,7 @@ using EventManagementSystem.Models;
 using EventManagementSystemUI.Views;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Net.Http.Json; 
+using System.Net.Http.Json;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,6 +12,9 @@ namespace EventManagementSystemUI.ViewModels
 {
     public partial class MainViewModel : ObservableObject
     {
+        private readonly HttpClient _httpClient;
+        private readonly Events.EventDetailsViewModel _eventDetailsViewModel;
+
         [ObservableProperty]
         private ObservableCollection<EventManagementSystem.Models.Event> events;
 
@@ -33,7 +36,7 @@ namespace EventManagementSystemUI.ViewModels
         private Button dynamicGroupButton;
 
         [ObservableProperty]
-        private Visibility newEventButtonVisibility = Visibility.Hidden;        
+        private Visibility newEventButtonVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
         private string eventTitle = "";
@@ -50,8 +53,6 @@ namespace EventManagementSystemUI.ViewModels
         [ObservableProperty]
         private string eventLocation = "";
 
-        private readonly HttpClient _httpClient;
-
         public MainViewModel()
         {
             System.Diagnostics.Debug.WriteLine("MainViewModel initialized"); // for debugging
@@ -60,8 +61,22 @@ namespace EventManagementSystemUI.ViewModels
             FutureEvents = new ObservableCollection<EventManagementSystem.Models.Event>();
             Groups = new ObservableCollection<EventManagementSystem.Models.Group>();
             GroupEvents = new ObservableCollection<EventManagementSystem.Models.Event>();
+            _eventDetailsViewModel = new Events.EventDetailsViewModel(_httpClient, NavigateToView);
             LoadEventsCommand.Execute(null);
             LoadGroupsCommand.Execute(null);
+        }
+
+        public Events.EventDetailsViewModel EventDetailsViewModel => _eventDetailsViewModel;
+
+        private void NavigateToView(object viewModel)
+        {
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            if (frame == null) return;
+
+            if (viewModel is Events.EventDetailsViewModel)
+            {
+                frame.Content = new EventDetailsView { DataContext = viewModel };
+            }
         }
 
         [RelayCommand]
@@ -168,6 +183,8 @@ namespace EventManagementSystemUI.ViewModels
                 {
                     Content = SelectedGroup.Name,
                     Command = new RelayCommand(() => Navigate("GroupDetails")),
+                    Background = System.Windows.Media.Brushes.Red, 
+                    Foreground = System.Windows.Media.Brushes.White,
                     DataContext = this
                 };
                 var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
@@ -234,7 +251,7 @@ namespace EventManagementSystemUI.ViewModels
                 case "NewEvent":
                     frame.Content = new NewEvent { DataContext = this };
                     NewEventButtonVisibility = Visibility.Visible;
-                    RemoveDynamicButton();  
+                    RemoveDynamicButton();
                     break;
                 case "GroupDetails":
                     if (SelectedGroup != null)
@@ -308,7 +325,7 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private void CancelNewEvent()
         {
-            NewEventButtonVisibility = Visibility.Hidden; 
+            NewEventButtonVisibility = Visibility.Collapsed;
             var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
             if (frame != null)
             {
@@ -323,3 +340,75 @@ namespace EventManagementSystemUI.ViewModels
 
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//using CommunityToolkit.Mvvm.ComponentModel;
+//using CommunityToolkit.Mvvm.Input;
+//using EventManagementSystemUI.ViewModels.Navigation;
+//using System.Net.Http;
+//using System.Windows;
+//using System.Windows.Controls;
+
+//namespace EventManagementSystemUI.ViewModels
+//{
+//    public partial class MainViewModel : ObservableObject
+//    {
+//        private readonly HttpClient _httpClient;
+//        private readonly NavigationViewModel _navigationViewModel;
+//        private readonly DynamicButtonManager _buttonManager;
+//        private readonly Events.EventViewModel _eventViewModel;
+//        private readonly Groups.GroupViewModel _groupViewModel;
+//        private readonly Groups.GroupDetailsViewModel _groupDetailsViewModel;
+
+//        public MainViewModel()
+//        {
+//            _httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5144/api/") };
+//            var mainFrame = Application.Current.MainWindow.FindName("MainFrame") as Frame;
+//            var buttonPanel = Application.Current.MainWindow.FindName("MainButtonPanel") as StackPanel;
+
+//            _buttonManager = new DynamicButtonManager(buttonPanel);
+//            _navigationViewModel = new NavigationViewModel(mainFrame, _buttonManager);
+//            _eventViewModel = new Events.EventViewModel(_httpClient);
+//            _groupViewModel = new Groups.GroupViewModel(_httpClient);
+//            _groupDetailsViewModel = new Groups.GroupDetailsViewModel(_httpClient, _navigationViewModel, _buttonManager);
+
+//            NavigateToDashboard();
+//        }
+
+//        public Events.EventViewModel EventViewModel => _eventViewModel;
+//        public Groups.GroupViewModel GroupViewModel => _groupViewModel;
+//        public Groups.GroupDetailsViewModel GroupDetailsViewModel => _groupDetailsViewModel;
+
+//        [RelayCommand]
+//        private void NavigateToDashboard()
+//        {
+//            _navigationViewModel.Navigate("Dashboard", this);
+//        }
+
+//        [RelayCommand]
+//        private void NavigateToEvents()
+//        {
+//            _navigationViewModel.Navigate("Events", _eventViewModel);
+//        }
+
+//        [RelayCommand]
+//        private void NavigateToGroups()
+//        {
+//            _navigationViewModel.Navigate("Groups", _groupViewModel);
+//        }
+
+//        [RelayCommand]
+//        private void NavigateToProfile()
+//        {
+//            _navigationViewModel.Navigate("Profile", this);
+//        }
+
+//        [RelayCommand]
+//        private void ShowNewEvent()
+//        {
+//            var newEventViewModel = new Events.NewEventViewModel(_httpClient, _navigationViewModel, _groupViewModel.Groups);
+//            _navigationViewModel.Navigate("NewEvent", newEventViewModel);
+//        }
+//    }
+//}

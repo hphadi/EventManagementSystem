@@ -74,7 +74,10 @@ public class EventController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Event>> GetEvent(int id)
     {
-        var eventEntity = await _context.Events.FindAsync(id);
+        var eventEntity = await _context.Events
+            .Include(e => e.EventGroups)
+            .ThenInclude(eg => eg.Group)
+            .FirstOrDefaultAsync(e => e.Id == id);
         if (eventEntity == null) return NotFound();
         return eventEntity;
     }

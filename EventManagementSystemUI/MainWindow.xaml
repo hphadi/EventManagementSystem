@@ -19,7 +19,7 @@
             <StackPanel x:Name="MainButtonPanel" Margin="10">
                 <Button Content="Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Margin="5" />
                 <Button Content="Events" Command="{Binding NavigateCommand}" CommandParameter="Events" Margin="5" />
-               
+
                 <Button Content="Groups" Command="{Binding NavigateCommand}" CommandParameter="Groups" Margin="5" />
                 <Button Content="Profile" Command="{Binding NavigateCommand}" CommandParameter="Profile" Margin="5" />
                 <Button Content="New Event" Command="{Binding NavigateCommand}" CommandParameter="NewEvent" Visibility= "{Binding NewEventButtonVisibility}"
@@ -45,8 +45,6 @@
                             </BeginStoryboard>
                         </EventTrigger>
                     </Button.Triggers>
-
-
                 </Button>
             </StackPanel>
         </materialDesign:Card>
