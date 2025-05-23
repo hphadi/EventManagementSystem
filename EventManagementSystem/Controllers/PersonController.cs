@@ -33,18 +33,15 @@ public class PersonController : ControllerBase
 
     // ✅ Sign in (authentication)
     [HttpPost("login")]
-    public async Task<IActionResult> Login(Person loginRequest)
+    public async Task<IActionResult> Login([FromBody]  LoginDto loginRequest)
     {
         var person = await _context.People
             .FirstOrDefaultAsync(p => p.Username == loginRequest.Username && p.Password == loginRequest.Password);
 
         if (person == null)
-        {
-            return Unauthorized("Invalid username or password.");
-        }
+            return Unauthorized("Invalid credentials");
 
-        // Optionally remove sensitive data (e.g. password) before returning
-        person.Password = "";
+        person.Password = ""; // hide password if returning person
         return Ok(person);
     }
 

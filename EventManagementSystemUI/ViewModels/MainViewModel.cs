@@ -23,9 +23,6 @@ namespace EventManagementSystemUI.ViewModels
 
         [ObservableProperty]
         private Visibility newEventButtonVisibility = Visibility.Collapsed;
-
-        [ObservableProperty]
-        private Visibility registrationButtonVisibility = Visibility.Visible;
         
         [ObservableProperty]
         private Visibility signInButtonVisibility = Visibility.Visible;
@@ -50,17 +47,18 @@ namespace EventManagementSystemUI.ViewModels
         private DateTime? eventEndDateTime;
 
         [ObservableProperty]
-        private NewUser newUser = new();
-
-        [ObservableProperty]
         private LoginUser loginUser = new();
 
         [ObservableProperty]
         private string eventLocation = "";
 
+        [ObservableProperty]
+        private NewUser newUserDraft = new();
+
         private readonly HttpClient _httpClient;
 
-        private EventManagementSystem.Models.Person CurrentUser = new();
+        [ObservableProperty]
+        private EventManagementSystem.Models.Person currentUser = new();
 
         public MainViewModel()
         {
@@ -242,12 +240,12 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task SubmitRegistration()
         {
-            if (NewUser.IsValid() == false)
+            if (NewUserDraft.IsValid() == false)
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            else if (NewUser.Password != NewUser.RepeatPassword)
+            else if (NewUserDraft.Password != NewUserDraft.RepeatPassword)
             {
                 MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -255,9 +253,9 @@ namespace EventManagementSystemUI.ViewModels
 
             var newUser = new PersonDto
             {
-                Name = NewUser.Name,
-                Username = NewUser.UserName,
-                Password = PasswordHasher.Hash(NewUser.Password)
+                Name = NewUserDraft.Name,
+                Username = NewUserDraft.UserName.ToLower(),
+                Password = PasswordHasher.Hash(NewUserDraft.Password)
             };
 
             try
@@ -267,7 +265,7 @@ namespace EventManagementSystemUI.ViewModels
                 if (response.IsSuccessStatusCode)
                 {
                     MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    CloseRegistrationCommand?.Execute(null);
+                    CloseLogInCommand?.Execute(null);
                 }
                 else if (response.StatusCode == HttpStatusCode.Conflict)
                 {
@@ -294,9 +292,9 @@ namespace EventManagementSystemUI.ViewModels
                 return;
             }
 
-            var loginRequest = new Person
+            var loginRequest = new EventManagementSystem.Models.LoginDto
             {
-                Username = LoginUser.UserName,
+                Username = LoginUser.UserName.ToLower(),
                 Password = PasswordHasher.Hash(LoginUser.Password)
             };
 
@@ -305,14 +303,14 @@ namespace EventManagementSystemUI.ViewModels
                 var response = await _httpClient.PostAsJsonAsync("person/login", loginRequest);
 
                 if (response.IsSuccessStatusCode)
-                {
+                {   
                     var person = await response.Content.ReadFromJsonAsync<Person>();
 
                     // Optionally store logged-in user
                     CurrentUser = person;
 
                     MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    CloseRegistrationCommand?.Execute(null);
+                    CloseLogInCommand?.Execute(null);
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -331,27 +329,30 @@ namespace EventManagementSystemUI.ViewModels
 
 
         [RelayCommand]
-        private void CloseRegistration()
+        private void CloseLogIn()
         {
             var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
             if (frame != null)
             {
                 frame.Content = new DashboardView { DataContext = this };
-                NewUser.Clear();
+            }
+            if(CurrentUser.Name != string.Empty)
+            {
+                SignInButtonVisibility = Visibility.Collapsed;
+                SignOutButtonVisibility = Visibility.Visible;
+            }
+            else
+            {
+                SignInButtonVisibility = Visibility.Visible;
+                SignOutButtonVisibility = Visibility.Collapsed;
             }
         }
 
         [RelayCommand]
-        private void SingOut()
+        private void SignOut()
         {
-            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-            if (frame != null)
-            {
-                frame.Content = new DashboardView { DataContext = this };
-                NewUser.Clear();
-                RegistrationButtonVisibility = Visibility.Visible;
-                SignInButtonVisibility = Visibility.Visible;
-            }
+            CurrentUser = new();
+            CloseLogInCommand?.Execute(null);
         }
 
     }

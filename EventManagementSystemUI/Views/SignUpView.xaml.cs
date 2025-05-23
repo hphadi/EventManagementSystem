@@ -30,8 +30,8 @@ namespace EventManagementSystemUI.Views
         {
             if (DataContext is MainViewModel vm)
             {
-                vm.NewUser.Password = PasswordBox.Password;
-                vm.NewUser.RepeatPassword = RepeatPasswordBox.Password;
+                vm.NewUserDraft.Password = PasswordBox.Password;
+                vm.NewUserDraft.RepeatPassword = RepeatPasswordBox.Password;
             }
         }
     }

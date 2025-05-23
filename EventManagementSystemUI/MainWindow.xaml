@@ -21,7 +21,7 @@
                 <Button Content="Events" Command="{Binding NavigateCommand}" CommandParameter="Events" Margin="5" />
                
                 <Button Content="Groups" Command="{Binding NavigateCommand}" CommandParameter="Groups" Margin="5" />
-                <Button Content="Profile" Command="{Binding NavigateCommand}" CommandParameter="Profile" Margin="5" />
+                <Button Content="Profile" Command="{Binding NavigateCommand}" CommandParameter="Profile" Margin="5" Visibility= "{Binding SignOutButtonVisibility}"/>
                 <Button Content="New Event" Command="{Binding NavigateCommand}" CommandParameter="NewEvent" Visibility= "{Binding NewEventButtonVisibility}"
                         Margin="5" Padding="10,5" Style="{DynamicResource MaterialDesignRaisedButton}"
                         Background="#FFF32B21" Foreground="White" 
@@ -48,7 +48,7 @@
 
 
                 </Button>
-                <Button Content="Register" Command="{Binding NavigateCommand}" CommandParameter="Register" Margin="5" Visibility= "{Binding RegisterButtonVisibility}"/>
+                <Button Content="Register" Command="{Binding NavigateCommand}" CommandParameter="Register" Margin="5" Visibility= "{Binding SignInButtonVisibility}"/>
                 <Button Content="Sign In" Command="{Binding NavigateCommand}" CommandParameter="SignIn" Margin="5" Visibility= "{Binding SignInButtonVisibility}"/>
                 <Button Content="Sign Out" Command="{Binding SignOutCommand}" Margin="5" Visibility= "{Binding SignOutButtonVisibility}"/>
             </StackPanel>
