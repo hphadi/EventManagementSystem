@@ -1,12 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EventManagementSystem.Models;
-using EventManagementSystemUI.Views;
+using EventManagementSystemUI.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http;
-using System.Net.Http.Json;
+using System.Net.Http.Json; 
 using System.Windows;
 using System.Windows.Controls;
+using EventManagementSystemUI.Tools;
+using System.Net;
+using EventManagementSystemUI.Views;
 
 namespace EventManagementSystemUI.ViewModels
 {
@@ -22,8 +25,17 @@ namespace EventManagementSystemUI.ViewModels
         private ObservableCollection<EventManagementSystem.Models.Event> futureEvents;
 
         [ObservableProperty]
-        private ObservableCollection<EventManagementSystem.Models.Group> groups;
+        private Visibility newEventButtonVisibility = Visibility.Collapsed;
+        
+        [ObservableProperty]
+        private Visibility signInButtonVisibility = Visibility.Visible;
+        
+        [ObservableProperty]
+        private Visibility signOutButtonVisibility = Visibility.Collapsed;
 
+        [ObservableProperty]
+        private ObservableCollection<EventManagementSystem.Models.Group> groups;
+        
         public ObservableCollection<Group> SelectedGroups { get; set; } = new();
 
         [ObservableProperty]
@@ -31,12 +43,6 @@ namespace EventManagementSystemUI.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<Event> groupEvents;
-
-        [ObservableProperty]
-        private Button dynamicGroupButton;
-
-        [ObservableProperty]
-        private Visibility newEventButtonVisibility = Visibility.Collapsed;
 
         [ObservableProperty]
         private string eventTitle = "";
@@ -51,7 +57,22 @@ namespace EventManagementSystemUI.ViewModels
         private DateTime? eventEndDateTime;
 
         [ObservableProperty]
+        private LoginUser loginUser = new();
+
+        [ObservableProperty]
         private string eventLocation = "";
+
+        [ObservableProperty]
+        private NewUser newUserDraft = new();
+
+        [ObservableProperty]
+        private EventManagementSystem.Models.Person currentUser = new();
+
+        [ObservableProperty]
+        private Button dynamicGroupButton;
+
+        [ObservableProperty]
+        private Button dynamicButton;
 
         public MainViewModel()
         {
@@ -75,7 +96,7 @@ namespace EventManagementSystemUI.ViewModels
 
             if (viewModel is Events.EventDetailsViewModel)
             {
-                frame.Content = new EventDetailsView { DataContext = viewModel };
+               // frame.Content = new EventDetailsView { DataContext = viewModel };
             }
         }
 
@@ -144,24 +165,29 @@ namespace EventManagementSystemUI.ViewModels
         {
             try
             {
-                System.Diagnostics.Debug.WriteLine($"Loading events for group {groupId}..."); // for debugging
-                var events = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Event>>($"Group/{groupId}/events");
+                System.Diagnostics.Debug.WriteLine($"Loading events for group {groupId}...");
+                var url = $"Group/{groupId}/events";
+                System.Diagnostics.Debug.WriteLine($"Requesting URL: {_httpClient.BaseAddress}{url}");
+                var response = await _httpClient.GetAsync(url); 
+                System.Diagnostics.Debug.WriteLine($"Response Status: {response.StatusCode}");
+                var events = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Event>>(url);
                 if (events != null)
                 {
+                    System.Diagnostics.Debug.WriteLine($"Loaded {events.Count} events.");
                     GroupEvents.Clear();
                     foreach (var evt in events)
                     {
-                        GroupEvents.Add(evt); // each event is added to the ObservableCollection
+                        GroupEvents.Add(evt);
                     }
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine("No group events loaded."); // for debugging
+                    System.Diagnostics.Debug.WriteLine("No group events loaded.");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error in LoadGroupEvents: {ex.Message}"); // for debugging
+                System.Diagnostics.Debug.WriteLine($"Error in LoadGroupEvents: {ex.Message}");
                 MessageBox.Show($"Error loading group events: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
@@ -171,42 +197,28 @@ namespace EventManagementSystemUI.ViewModels
         {
             if (SelectedGroup != null)
             {
+                AddDynamicButton();
                 NavigateCommand.Execute("GroupDetails");
             }
         }
 
         private void AddDynamicButton()
         {
-            if (SelectedGroup != null && DynamicGroupButton == null)
+            if (SelectedGroup != null && DynamicButton == null)
             {
-                DynamicGroupButton = new Button
+                DynamicButton = new Button
                 {
                     Content = SelectedGroup.Name,
-                    Command = new RelayCommand(() => Navigate("GroupDetails")),
-                    Background = System.Windows.Media.Brushes.Red, 
-                    Foreground = System.Windows.Media.Brushes.White,
-                    DataContext = this
+                    Margin = new Thickness(5),
+                    Padding = new Thickness(10, 5, 10, 5),
+                    Style = (Style)Application.Current.Resources["MaterialDesignRaisedButton"],
+                    Background = System.Windows.Media.Brushes.Red,
+                    Foreground = System.Windows.Media.Brushes.White
                 };
-                var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-                if (frame != null)
+                var stackPanel = Application.Current.MainWindow.FindName("MainButtonPanel") as StackPanel;
+                if (stackPanel != null)
                 {
-                    var button = new Button
-                    {
-                        Content = "Group Details",
-                        Margin = new Thickness(5),
-                        Padding = new Thickness(10, 5, 10, 5),
-                        Style = (Style)Application.Current.Resources["MaterialDesignRaisedButton"],
-                        Background = System.Windows.Media.Brushes.Red,
-                        Foreground = System.Windows.Media.Brushes.White,
-                        Command = NavigateCommand,
-                        CommandParameter = "GroupDetails",
-                        DataContext = this
-                    };
-                    var stackPanel = Application.Current.MainWindow.FindName("MainButtonPanel") as StackPanel;
-                    if (stackPanel != null)
-                    {
-                        stackPanel.Children.Add(DynamicGroupButton);
-                    }
+                    stackPanel.Children.Add(DynamicButton);
                 }
             }
         }
@@ -244,6 +256,10 @@ namespace EventManagementSystemUI.ViewModels
                     frame.Content = new GroupManagementView { DataContext = this };
                     RemoveDynamicButton();
                     break;
+                case "GroupDetails":
+                    frame.Content = new GroupDetailsView { DataContext = this };
+                    RemoveDynamicButton();
+                    break;
                 case "Profile":
                     frame.Content = new ProfileView { DataContext = this };
                     RemoveDynamicButton();
@@ -253,13 +269,11 @@ namespace EventManagementSystemUI.ViewModels
                     NewEventButtonVisibility = Visibility.Visible;
                     RemoveDynamicButton();
                     break;
-                case "GroupDetails":
-                    if (SelectedGroup != null)
-                    {
-                        frame.Content = new GroupDetailsView { DataContext = this };
-                        AddDynamicButton();
-                        LoadGroupEvents(SelectedGroup.Id).ConfigureAwait(false);
-                    }
+                case "Register":
+                    frame.Content = new SignUpView { DataContext = this };
+                    break;
+                case "SignIn":
+                    frame.Content = new SignIn{ DataContext = this };
                     break;
             }
         }
@@ -325,7 +339,7 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private void CancelNewEvent()
         {
-            NewEventButtonVisibility = Visibility.Collapsed;
+            NewEventButtonVisibility = Visibility.Collapsed; 
             var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
             if (frame != null)
             {
@@ -336,6 +350,124 @@ namespace EventManagementSystemUI.ViewModels
                 EventEndDateTime = null;
                 EventLocation = "";
             }
+        }
+
+        [RelayCommand]
+        private async Task SubmitRegistration()
+        {
+            if (NewUserDraft.IsValid() == false)
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            else if (NewUserDraft.Password != NewUserDraft.RepeatPassword)
+            {
+                MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var newUser = new PersonDto
+            {
+                Name = NewUserDraft.Name,
+                Username = NewUserDraft.UserName.ToLower(),
+                Password = PasswordHasher.Hash(NewUserDraft.Password)
+            };
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("person/register", newUser);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Registration successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CloseLogInCommand?.Execute(null);
+                }
+                else if (response.StatusCode == HttpStatusCode.Conflict)
+                {
+                    MessageBox.Show("Username already exists.", "Conflict", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show($"Registration failed: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        [RelayCommand]
+        private async Task SubmitSignIn()
+        {
+            if (LoginUser.IsValid() == false)
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var loginRequest = new EventManagementSystem.Models.LoginDto
+            {
+                Username = LoginUser.UserName.ToLower(),
+                Password = PasswordHasher.Hash(LoginUser.Password)
+            };
+
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync("person/login", loginRequest);
+
+                if (response.IsSuccessStatusCode)
+                {   
+                    var person = await response.Content.ReadFromJsonAsync<Person>();
+
+                    // Optionally store logged-in user
+                    CurrentUser = person;
+
+                    MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    CloseLogInCommand?.Execute(null);
+                }
+                else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    MessageBox.Show("Invalid username or password.", "Login Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+                else
+                {
+                    MessageBox.Show($"Login error: {response.StatusCode}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Login exception: {ex.Message}", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        [RelayCommand]
+        private void CloseLogIn()
+        {
+            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
+            if (frame != null)
+            {
+                frame.Content = new DashboardView { DataContext = this };
+            }
+            if(CurrentUser.Name != string.Empty)
+            {
+                SignInButtonVisibility = Visibility.Collapsed;
+                SignOutButtonVisibility = Visibility.Visible;
+            }
+            else
+            {
+                SignInButtonVisibility = Visibility.Visible;
+                SignOutButtonVisibility = Visibility.Collapsed;
+            }
+        }
+
+        [RelayCommand]
+        private void SignOut()
+        {
+            CurrentUser = new();
+            CloseLogInCommand?.Execute(null);
         }
 
     }

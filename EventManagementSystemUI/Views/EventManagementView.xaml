@@ -19,7 +19,7 @@
             <materialDesign:Card>
                 <StackPanel>
                     <TextBlock Text="Events List" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="10" />
-                    <ListView ItemsSource="{Binding Events}" Height="400">
+                    <ListView ItemsSource="{Binding Events}" Height="400" MouseDoubleClick="ListView_MouseDoubleClick">
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="150" />

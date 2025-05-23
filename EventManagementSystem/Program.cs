@@ -48,7 +48,6 @@ try
             connection.Open();
             Console.WriteLine("Connection successful!");
         
-        
     }
 }
 catch (Exception ex)

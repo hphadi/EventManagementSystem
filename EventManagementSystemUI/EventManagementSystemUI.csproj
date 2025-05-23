@@ -13,6 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Page Remove="Resources\ButtonTag.xaml" />
+    <Page Remove="Resources\Styles.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
     <PackageReference Include="MaterialDesignThemes" Version="5.2.1" />
@@ -26,6 +31,12 @@
   </ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\EventManagementSystem\EventManagementSystem.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Resource Include="Resources\ButtonTag.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Resource>
+	  <Resource Include="Resources\Styles.xaml" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Properties\Settings.Designer.cs">
