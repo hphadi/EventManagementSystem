@@ -51,16 +51,20 @@ public class EventController : ControllerBase
         _context.Events.Add(newEvent);
         await _context.SaveChangesAsync();
 
-        foreach (var groupId in dto.GroupIds)
+        if (dto.GroupIds != null)
         {
-            _context.EventGroups.Add(new EventGroup
+            foreach (var groupId in dto.GroupIds)
             {
-                EventId = newEvent.Id,
-                GroupId = groupId
-            });
-        }
+                _context.EventGroups.Add(new EventGroup
+                {
+                    EventId = newEvent.Id,
+                    GroupId = groupId
+                });
+            }
 
-        await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+        }
+        
         return Ok(newEvent);
     }
     public async Task<ActionResult<Event>> CreateEvent(Event newEvent)

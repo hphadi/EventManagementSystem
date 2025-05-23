@@ -1,0 +1,8 @@
+namespace EventManagementSystemUI.Resources
+{
+    public static class ButtonTag
+    {
+        public static readonly Color MouseOverBackgroundGreen = Color.FromRgb(102, 187, 106);
+        public static readonly Color MouseOverBackgroundGray = Color.FromRgb(120, 144, 156);
+    }
+}

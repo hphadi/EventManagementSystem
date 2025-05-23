@@ -35,7 +35,7 @@
         <!-- Title -->
         <TextBlock Grid.Row="1" Text="Title:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5" 
-              Text="{Binding EventTitle, UpdateSourceTrigger=PropertyChanged}" 
+              Text="{Binding NewEventVM.NewEventDraft.Title, UpdateSourceTrigger=PropertyChanged}" 
               Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
               materialDesign:HintAssist.Hint="Enter event title" 
               materialDesign:HintAssist.IsFloating="True"/>
@@ -43,7 +43,7 @@
         <!-- Description -->
         <TextBlock Grid.Row="2" Text="Description:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
         <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5" 
-              Text="{Binding EventDescription, UpdateSourceTrigger=PropertyChanged}" 
+              Text="{Binding NewEventVM.NewEventDraft.Description, UpdateSourceTrigger=PropertyChanged}" 
               Height="100" AcceptsReturn="True" TextWrapping="Wrap" 
               Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
               materialDesign:HintAssist.Hint="Enter event description" 
@@ -52,24 +52,24 @@
         <!-- Start Date -->
         <TextBlock Grid.Row="3" Text="Start Date:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
         <xctk:DateTimePicker Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5" 
-                     Value="{Binding EventStartDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                     Value="{Binding NewEventVM.NewEventDraft.StartDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Format="Custom" FormatString="yyyy-MM-dd HH:mm"  />
         <!-- End Date -->
         <TextBlock Grid.Row="4" Text="End Date:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
         <xctk:DateTimePicker Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5"
-             Value="{Binding EventEndDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+             Value="{Binding NewEventVM.NewEventDraft.EndDateTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
              Format="Custom" FormatString="yyyy-MM-dd HH:mm"  />
 
         <!-- Location -->
         <TextBlock Grid.Row="5" Text="Location:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
         <TextBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5" 
-                 Text="{Binding EventLocation, UpdateSourceTrigger=PropertyChanged}" 
+                 Text="{Binding NewEventVM.NewEventDraft.Location, UpdateSourceTrigger=PropertyChanged}" 
                  Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
                  materialDesign:HintAssist.Hint="Enter event location" 
                  materialDesign:HintAssist.IsFloating="True"/>
         <ListBox Grid.Row="6"
          x:Name="GroupsListBox"
-         ItemsSource="{Binding Groups}"
+         ItemsSource="{Binding NewEventVM.SelectedGroups}"
          SelectionMode="Multiple"
          Margin="5"
          Height="150"
@@ -141,7 +141,7 @@
         <!-- Buttons -->
         <StackPanel Grid.Row="7" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
             <Button Content="Submit" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
-                    Background="#FF4CAF50" Foreground="White" Command="{Binding SubmitNewEventCommand}"
+                    Background="#FF4CAF50" Foreground="White" Command="{Binding NewEventVM.SubmitNewEventCommand}"
                     >
                 <Button.Triggers>
                     <EventTrigger RoutedEvent="Button.MouseEnter">
@@ -163,7 +163,7 @@
                 </Button.Triggers>
             </Button>
             <Button Content="Cancel" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
-                    Background="#FF607D8B" Foreground="White" Command="{Binding CancelNewEventCommand}"
+                    Background="#FF607D8B" Foreground="White" Command="{Binding NewEventVM.CancelNewEventCommand}"
                     >
                 <Button.Triggers>
                     <EventTrigger RoutedEvent="Button.MouseEnter">

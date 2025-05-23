@@ -17,35 +17,19 @@
         <!-- Sidebar -->
         <materialDesign:Card Grid.Column="0" Background="{DynamicResource MaterialDesignPaper}">
             <StackPanel x:Name="MainButtonPanel" Margin="10">
-                <Button Content="Dashboard" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Margin="5" />
-                <Button Content="Events" Command="{Binding NavigateCommand}" CommandParameter="Events" Margin="5" />
-
-                <Button Content="Groups" Command="{Binding NavigateCommand}" CommandParameter="Groups" Margin="5" />
-                <Button Content="Profile" Command="{Binding NavigateCommand}" CommandParameter="Profile" Margin="5" />
-                <Button Content="New Event" Command="{Binding NavigateCommand}" CommandParameter="NewEvent" Visibility= "{Binding NewEventButtonVisibility}"
-                        Margin="5" Padding="10,5" Style="{DynamicResource MaterialDesignRaisedButton}"
-                        Background="#FFF32B21" Foreground="White" 
-                        ToolTip="Currently viewing New Event page" 
-                        materialDesign:ButtonProgressAssist.IsIndeterminate="True" BorderBrush="#FFF32B21">
-                    <Button.Triggers>
-                        <EventTrigger RoutedEvent="Button.MouseEnter">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                    To="#FFF32B21" Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="Button.MouseLeave">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                    To="#FFF32B21" Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Button.Triggers>
-                </Button>
+                <ItemsControl ItemsSource="{Binding NavVM.DynamicButtons}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding Title}"
+                        Command="{Binding Command}"
+                        CommandParameter="{Binding CommandParameter}"
+                        Visibility="{Binding Visibility}"
+                        Background="{Binding Background}"
+                        Margin="5"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </materialDesign:Card>
         <!-- Main Content -->

@@ -18,15 +18,15 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<EventGroup>()
             .HasKey(eg => new { eg.EventId, eg.GroupId });
 
-        //modelBuilder.Entity<EventGroup>()
-        //    .HasOne(eg => eg.Event)
-        //    .WithMany(e => e.EventGroups)
-        //    .HasForeignKey(eg => eg.EventId);
+        modelBuilder.Entity<EventGroup>()
+            .HasOne(eg => eg.Event)
+            .WithMany(e => e.EventGroups)
+            .HasForeignKey(eg => eg.EventId);
 
-        //modelBuilder.Entity<EventGroup>()
-        //    .HasOne(eg => eg.Group)
-        //    .WithMany(g => g.EventGroups)
-        //    .HasForeignKey(eg => eg.GroupId);
+        modelBuilder.Entity<EventGroup>()
+            .HasOne(eg => eg.Group)
+            .WithMany(g => g.EventGroups)
+            .HasForeignKey(eg => eg.GroupId);
 
         //modelBuilder.Entity<GroupMember>()
         //    .HasKey(gm => new { gm.GroupId, gm.PersonId });

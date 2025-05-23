@@ -27,15 +27,15 @@
             <!-- Event Info -->
             <materialDesign:Card Grid.Column="0" Margin="0,0,10,0" Padding="10">
                 <StackPanel>
-                    <TextBlock Text="{Binding SelectedEvent.Title}" Style="{StaticResource MaterialDesignHeadline6TextBlock}" FontWeight="Bold" Margin="0,0,0,5"/>
+                    <TextBlock Text="{Binding EventDetailsVM.SelectedEvent.Title}" Style="{StaticResource MaterialDesignHeadline6TextBlock}" FontWeight="Bold" Margin="0,0,0,5"/>
                     <TextBlock Text="Start Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,0,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.StartDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                    <TextBlock Text="{Binding EventDetailsVM.SelectedEvent.StartDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
                     <TextBlock Text="End Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.EndDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                    <TextBlock Text="{Binding EventDetailsVM.SelectedEvent.EndDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
                     <TextBlock Text="Location:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.Location}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                    <TextBlock Text="{Binding EventDetailsVM.SelectedEvent.Location}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
                     <TextBlock Text="Description:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.Description}" Style="{StaticResource MaterialDesignBody2TextBlock}" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding EventDetailsVM.SelectedEvent.Description}" Style="{StaticResource MaterialDesignBody2TextBlock}" TextWrapping="Wrap"/>
                 </StackPanel>
             </materialDesign:Card>
 

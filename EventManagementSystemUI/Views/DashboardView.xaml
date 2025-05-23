@@ -13,7 +13,7 @@
           <TextBlock Text="Dashboard" Style="{DynamicResource MaterialDesignHeadline5TextBlock}" Margin="0,0,136,0" />
             
         </materialDesign:Card>
-        <Button Content="Refresh" Command="{Binding LoadEventsCommand}" Margin="430,10,10,10" Style="{DynamicResource MaterialDesignFlatButton}" />
+        <Button Content="Refresh" Command="{Binding EventVM.LoadEventsCommand}" Margin="430,10,10,10" Style="{DynamicResource MaterialDesignFlatButton}" />
         <Grid Grid.Row="1" Margin="0,10,0,0">
           <Grid.ColumnDefinitions>
               <ColumnDefinition Width="2*" />

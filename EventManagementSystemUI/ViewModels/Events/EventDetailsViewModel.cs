@@ -6,12 +6,13 @@ using System.Net.Http.Json;
 using System.Windows;
 using EventManagementSystem.Models;
 
-namespace EventManagementSystemUI.ViewModels.Events
+namespace EventManagementSystemUI.ViewModels
 {
     public partial class EventDetailsViewModel : ObservableObject
     {
         private readonly HttpClient _httpClient;
-        private readonly Action<object> _navigateAction; 
+        MainViewModel _vm;
+        //private readonly Action<object> _navigateAction; 
 
         [ObservableProperty]
         private Event selectedEvent;
@@ -19,10 +20,11 @@ namespace EventManagementSystemUI.ViewModels.Events
         [ObservableProperty]
         private ObservableCollection<Group> eventGroups;
 
-        public EventDetailsViewModel(HttpClient httpClient, Action<object> navigateAction)
+        public EventDetailsViewModel(HttpClient httpClient, MainViewModel vm)
         {
             _httpClient = httpClient;
-            _navigateAction = navigateAction;
+            _vm = vm;
+            
             EventGroups = new ObservableCollection<Group>();
         }
 
@@ -49,11 +51,11 @@ namespace EventManagementSystemUI.ViewModels.Events
             }
         }
 
-        [RelayCommand]
-        public async Task NavigateToEventDetails(int eventId)
-        {
-            await LoadEventDetails(eventId);
-            _navigateAction?.Invoke(this); 
-        }
+        //[RelayCommand]
+        //public async Task NavigateToEventDetails(int eventId)
+        //{
+        //    await LoadEventDetails(eventId);
+        //    _navigateAction?.Invoke(this); 
+        //}
     }
 }

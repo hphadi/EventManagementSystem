@@ -12,18 +12,18 @@ namespace EventManagementSystemUI.Views
         public NewEvent()
         {
             InitializeComponent();
-            DataContextChanged += (s, e) =>
-            {
-                if (DataContext is MainViewModel vm)
-                {
-                    GroupsListBox.SelectionChanged += (s2, e2) =>
-                    {
-                        vm.SelectedGroups.Clear();
-                        foreach (Group item in GroupsListBox.SelectedItems)
-                            vm.SelectedGroups.Add(item);
-                    };
-                }
-            };
+            //DataContextChanged += (s, e) =>
+            //{
+            //    if (DataContext is MainViewModel vm)
+            //    {
+            //        GroupsListBox.SelectionChanged += (s2, e2) =>
+            //        {
+            //            vm.NewEventVM.SelectedGroups.Clear();
+            //            foreach (Group item in GroupsListBox.SelectedItems)
+            //                vm.NewEventVM.SelectedGroups.Add(item);
+            //        };
+            //    }
+            //};
         }
     }
 }

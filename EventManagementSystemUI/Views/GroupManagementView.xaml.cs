@@ -16,16 +16,16 @@ public partial class GroupManagementView : WPF.Controls.UserControl
 
     private void ListView_MouseDoubleClick(object sender, WPF.Input.MouseButtonEventArgs e)
     {
-        if (sender is ListView listView && listView.SelectedItem != null)
-        {
-        //if (DataContext is GroupViewModel groupViewModel)
-        //{
-            //groupViewModel.GroupDetailsViewModel.SelectedGroup = listView.SelectedItem as EventManagementSystem.Models.Group;
-            //groupViewModel.GroupDetailsViewModel.OnGroupSelectedCommand.Execute(null);
-        //}
+    //    if (sender is ListView listView && listView.SelectedItem != null)
+    //    {
+    //    //if (DataContext is GroupViewModel groupViewModel)
+    //    //{
+    //        //groupViewModel.GroupDetailsViewModel.SelectedGroup = listView.SelectedItem as EventManagementSystem.Models.Group;
+    //        //groupViewModel.GroupDetailsViewModel.OnGroupSelectedCommand.Execute(null);
+    //    //}
 
-            var viewModel = DataContext as MainViewModel;
-            viewModel?.GroupSelectedCommand.Execute(null);
-        }
+    //        var viewModel = DataContext as MainViewModel;
+    //        viewModel?.GroupSelectedCommand.Execute(null);
+    //    }
     }
 }
