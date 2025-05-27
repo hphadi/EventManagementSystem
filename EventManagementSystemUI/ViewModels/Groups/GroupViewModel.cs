@@ -17,6 +17,7 @@ namespace EventManagementSystemUI.ViewModels
         {
             _httpClient = httpClient;
             _vm = vm;
+            LoadGroupsCommand.Execute(null);
         }
 
         [ObservableProperty]
@@ -57,9 +58,12 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task GroupSelected()
         {
-            var group = _vm.GroupVM.SelectedGroup;
-            _vm.NavVM.DynamicButtons.Add(new NavigationButton { Id = "g"+group.Id, Title = group.Name, CommandParameter = group.Id.ToString(), Command = _vm.NavVM.GroupDetailsCommand });
-            _vm.NavVM.GroupDetails(group.Id.ToString());
+            var selected = _vm.GroupVM.SelectedGroup;
+            if (selected is not null)
+            {
+                var data = new NavData(selected.Id, selected.Name);
+                _vm.NavVM.AddGroupToMenu(data);
+            }
         }
     }
 }

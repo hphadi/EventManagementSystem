@@ -20,7 +20,7 @@ namespace EventManagementSystemUI.ViewModels
             _httpClient = httpClient;
             _vm = vm;
             Id =  id;
-            LoadGroupDetailsCommand.Execute(Int32.Parse(Id));
+            LoadGroupDetailsCommand.Execute(Id);
         }
 
         [ObservableProperty]
@@ -31,14 +31,14 @@ namespace EventManagementSystemUI.ViewModels
 
 
         [RelayCommand]
-        private async Task LoadGroupDetails(int groupId)
+        private async Task LoadGroupDetails(string groupId)
         {
-            SelectedGroup = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.GroupWithEventsDto>($"group/{groupId}");
+            SelectedGroup = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.GroupWithEventsDto>($"group/{groupId.ToString()}");
         }
         [RelayCommand]
         private async Task Close()
         {
-            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "g" + Id));
+            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "g" + Id.ToString()));
             _vm.NavVM.NavigateCommand.Execute("Groups");
         }
         [RelayCommand]
@@ -46,7 +46,7 @@ namespace EventManagementSystemUI.ViewModels
         {
             if (SelectedEvent is not null)
             {
-                var data = new EventNavData(SelectedEvent.Id.ToString(), SelectedEvent.Title);
+                var data = new NavData(SelectedEvent.Id, SelectedEvent.Title);
                 _vm.NavVM.AddEventToMenu(data);
             }
         }

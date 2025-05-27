@@ -24,5 +24,14 @@ namespace EventManagementSystemUI.Models
 
         [ObservableProperty]
         private Visibility visibility = Visibility.Visible;
+
+        [ObservableProperty]
+        private FontWeight fontWeight = FontWeights.Normal;
+
+        [ObservableProperty]
+        private double fontSize = 14; // ✅ default size for static buttons
+
+        [ObservableProperty]
+        private Thickness margin = new(5);
     }
 }

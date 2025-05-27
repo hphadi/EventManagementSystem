@@ -24,6 +24,7 @@ namespace EventManagementSystemUI.ViewModels
         {
             _httpClient = httpClient;
             _vm = vm;
+            LoadEventsCommand.Execute(null);
         }
 
         [ObservableProperty]
@@ -38,14 +39,14 @@ namespace EventManagementSystemUI.ViewModels
                 var events_loaded = await _httpClient.GetFromJsonAsync<List<EventManagementSystem.Models.Event>>("Event");
                 if (events_loaded != null)
                 {
-                    events.Clear();
-                    futureEvents.Clear();
+                    Events.Clear();
+                    FutureEvents.Clear();
                     foreach (var evt in events_loaded)
                     {
-                        events.Add(evt); // each event is added to the ObservableCollection
+                        Events.Add(evt); // each event is added to the ObservableCollection
                         if (evt.StartDate > DateTime.Now)
                         {
-                            futureEvents.Add(evt); // each future event is added to the FutureEvents ObservableCollection
+                            FutureEvents.Add(evt); // each future event is added to the FutureEvents ObservableCollection
                         }
                     }
                 }
@@ -68,7 +69,7 @@ namespace EventManagementSystemUI.ViewModels
 
             if (selected is not null)
             {
-                var data = new EventNavData(selected.Id.ToString(), selected.Title);
+                var data = new NavData(selected.Id, selected.Title);
                 _vm.NavVM.AddEventToMenu(data);
             }
         }

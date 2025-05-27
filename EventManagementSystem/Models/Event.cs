@@ -28,5 +28,5 @@ public class SimpleGroupDto
     public string City { get; set; } = string.Empty;
 }
 
-public record EventNavData(string Id, string Title);
+
 

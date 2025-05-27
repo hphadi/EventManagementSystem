@@ -80,10 +80,10 @@ public class GroupController : ControllerBase
     //}
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<GroupWithEventsDto>> GetGroupDetails(int id)
+    public async Task<ActionResult<GroupWithEventsDto>> GetGroupDetails(string id)
     {
         var group = await _context.Groups
-            .Where(g => g.Id == id)
+            .Where(g => g.Id.ToString() == id)
             .Include(g => g.EventGroups)
             .ThenInclude(eg => eg.Event)
             .Select(g => new GroupWithEventsDto
