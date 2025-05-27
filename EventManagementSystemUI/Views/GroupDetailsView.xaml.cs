@@ -1,6 +1,7 @@
 ﻿using EventManagementSystemUI.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -34,7 +35,8 @@ namespace EventManagementSystemUI.Views
             if (sender is ListView listView && listView.SelectedItem != null)
             {
                 var vm = DataContext as GroupDetailsViewModel;
-                vm.EventSelectedCommand.Execute(null);
+                if (vm != null && !DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                    vm.EventSelectedCommand.Execute(null);
             }
         }
     }

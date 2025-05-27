@@ -3,6 +3,8 @@ using EventManagementSystemUI.ViewModels;
 using WPF = System.Windows; // for WPF
 //using EventManagementSystemUI.ViewModels.Groups;
 using EventManagementSystem.Models;
+using System.ComponentModel;
+using System.Windows;
 
 
 namespace EventManagementSystemUI.Views;
@@ -19,7 +21,8 @@ public partial class GroupManagementView : WPF.Controls.UserControl
         if (sender is ListView listView && listView.SelectedItem != null)
         {
             var vm = DataContext as MainViewModel;
-            vm.GroupVM?.GroupSelectedCommand.Execute(null);
+            if (vm != null && !DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                vm.GroupVM?.GroupSelectedCommand.Execute(null);
         }
     }
 }
