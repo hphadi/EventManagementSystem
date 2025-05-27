@@ -38,22 +38,22 @@ namespace EventManagementSystemUI.ViewModels
         private async Task SubmitNewEvent()
         {
 
-            if (newEventDraft.IsValid())
+            if (!NewEventDraft.IsValid())
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             var startDateUtc = NewEventDraft.StartDateTime.Value.ToUniversalTime();
-            var endDateUtc = newEventDraft.EndDateTime.Value.ToUniversalTime();
+            var endDateUtc = NewEventDraft.EndDateTime.Value.ToUniversalTime();
 
             var newEvent = new EventDto
             {
-                Title = newEventDraft.Title,
-                Description = newEventDraft.Description,
+                Title = NewEventDraft.Title,
+                Description = NewEventDraft.Description,
                 StartDate = startDateUtc,
                 EndDate = endDateUtc,
-                Location = newEventDraft.Location,
+                Location = NewEventDraft.Location,
                 CreatedAt = DateTime.Now.ToUniversalTime(),
                 GroupIds = SelectedGroups.IsNullOrEmpty()? null : SelectedGroups.Select(g => g.Id).ToList()
             };
@@ -93,7 +93,7 @@ namespace EventManagementSystemUI.ViewModels
         private void CancelNewEvent()
         {
             _vm.NavVM.ChangeVisibility("NewEvent", false);
-            newEventDraft.Clear();
+            NewEventDraft.Clear();
             _vm.NavVM.Navigate("Dashboard");
         }
     }
