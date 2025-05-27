@@ -24,10 +24,10 @@ namespace EventManagementSystemUI.ViewModels
         }
 
         [ObservableProperty]
-        private EventManagementSystem.Models.GroupWithEventsDto selectedGroup = new();
+        private EventManagementSystem.Models.GroupWithEventsDto selectedGroup;
 
         [ObservableProperty]
-        private EventManagementSystem.Models.Event selectedEvent;
+        private EventManagementSystem.Models.SimpleEventDto selectedEvent;
 
 
         [RelayCommand]
@@ -44,8 +44,12 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task EventSelected()
         {
-            var _event = SelectedEvent;
-            _vm.NavVM.AddEventToMenu(_event);
+            if (SelectedEvent is not null)
+            {
+                var data = new EventNavData(SelectedEvent.Id.ToString(), SelectedEvent.Title);
+                _vm.NavVM.AddEventToMenu(data);
+            }
         }
+
     }
 }

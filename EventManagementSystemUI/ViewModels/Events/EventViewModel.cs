@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using EventManagementSystem.Models;
 using EventManagementSystemUI.Models;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -63,8 +64,13 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task EventSelected()
         {
-            var _event = _vm.EventVM.selectedEvent;
-            _vm.NavVM.AddEventToMenu(_event);
+            var selected = _vm.EventVM.SelectedEvent;
+
+            if (selected is not null)
+            {
+                var data = new EventNavData(selected.Id.ToString(), selected.Title);
+                _vm.NavVM.AddEventToMenu(data);
+            }
         }
     }
 }

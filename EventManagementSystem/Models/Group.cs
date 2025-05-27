@@ -1,4 +1,6 @@
-﻿namespace EventManagementSystem.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace EventManagementSystem.Models;
 
 public class GroupBase
 {
@@ -8,14 +10,15 @@ public class GroupBase
     public string Description { get; set; } = string.Empty;
 }
 
-public class Group:GroupBase
+public class Group : GroupBase
 {
-    public List<EventGroup> EventGroups = [];
+    public List<EventGroup> EventGroups { get; set; } = new();
 }
 
-public class GroupWithEventsDto:GroupBase
+public class GroupWithEventsDto : GroupBase
 {
-    public List<SimpleEventDto> Events = [];
+    [JsonPropertyName("events")]
+    public List<SimpleEventDto> Events { get; set; } = new();
 }
 
 public class SimpleEventDto
@@ -23,4 +26,5 @@ public class SimpleEventDto
     public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
+    public string Location { get; set; } = string.Empty;
 }

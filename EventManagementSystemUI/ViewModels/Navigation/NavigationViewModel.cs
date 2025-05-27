@@ -7,6 +7,8 @@ using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using EventManagementSystemUI.Views;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Logging;
+using EventManagementSystem.Models;
 
 namespace EventManagementSystemUI.ViewModels
 {
@@ -87,16 +89,17 @@ namespace EventManagementSystemUI.ViewModels
         }
 
         [RelayCommand]
-        public void AddEventToMenu(EventManagementSystem.Models.EventBase _event)
+        public void AddEventToMenu(EventNavData data)
         {
             _vm.NavVM.DynamicButtons.Add(new NavigationButton
             {
-                Id = "e" + _event.Id,
-                Title = _event.Title,
-                CommandParameter = _event.Id.ToString(),
+                Id = "e" + data.Id,
+                Title = data.Title,
+                CommandParameter = data.Id,
                 Command = _vm.NavVM.EventDetailsCommand
             });
-            _vm.NavVM.EventDetails(_event.Id.ToString());
+
+            _vm.NavVM.EventDetails(data.Id);
         }
 
         public NavigationButton? GetButtonById(string id)

@@ -66,6 +66,8 @@ public class GroupController : ControllerBase
     {
         var group = await _context.Groups
             .Where(g => g.Id == id)
+            .Include(g => g.EventGroups)
+            .ThenInclude(eg => eg.Event)
             .Select(g => new GroupWithEventsDto
             {
                 Id = g.Id,
@@ -77,7 +79,8 @@ public class GroupController : ControllerBase
                     {
                         Id = eg.Event.Id,
                         Title = eg.Event.Title,
-                        StartDate = eg.Event.StartDate
+                        StartDate = eg.Event.StartDate,
+                        Location = eg.Event.Location
                     }).ToList()
             })
             .FirstOrDefaultAsync();
