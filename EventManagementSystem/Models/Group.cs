@@ -7,6 +7,7 @@ public class GroupBase
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string City { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
     public string Description { get; set; } = string.Empty;
 }
 
@@ -27,4 +28,9 @@ public class SimpleEventDto
     public string Title { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
     public string Location { get; set; } = string.Empty;
+}
+
+public class NewGroupDto:GroupBase
+{
+//    public List<int>? EventIds { get; set; }
 }

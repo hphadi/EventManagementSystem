@@ -32,6 +32,7 @@ namespace EventManagementSystemUI.ViewModels
             DynamicButtons.Add(new NavigationButton { Id = "Events", Title = "Events", CommandParameter = "Events", Command = NavigateCommand });
             DynamicButtons.Add(new NavigationButton { Id = "Groups", Title = "Groups", CommandParameter = "Groups", Command = NavigateCommand });
             DynamicButtons.Add(new NavigationButton { Id = "NewEvent", Title = "New Event", CommandParameter = "NewEvent", Command = NavigateCommand, Background = redBrush, Visibility = Visibility.Collapsed });
+            DynamicButtons.Add(new NavigationButton { Id = "NewGroup", Title = "New Group", CommandParameter = "NewGroup", Command = NavigateCommand, Background = redBrush, Visibility = Visibility.Collapsed });
             DynamicButtons.Add(new NavigationButton { Id = "SignOut", Title = "Sign Out", Command = _vm.UserVM.SignOutCommand, Visibility = Visibility.Collapsed });
             DynamicButtons.Add(new NavigationButton { Id = "Register", Title = "Register", CommandParameter = "Register", Command = NavigateCommand });
             DynamicButtons.Add(new NavigationButton { Id = "SignIn", Title = "Sign In", CommandParameter = "SignIn", Command = NavigateCommand });
@@ -57,6 +58,9 @@ namespace EventManagementSystemUI.ViewModels
                 //case "GroupDetails":
                 //    frame.Content = new GroupDetailsView { DataContext = _vm };
                 //    break;
+                case "NewGroup":
+                    frame.Content = new NewGroup { DataContext = _vm };
+                    break;
                 case "Profile":
                     frame.Content = new ProfileView { DataContext = _vm };
                     break;
@@ -122,7 +126,7 @@ namespace EventManagementSystemUI.ViewModels
             //{
             //    frame.Content = new NewEvent { DataContext = _vm };
             //    ChangeVisibility("NewEvent", true);
-//}
+            //}
         }
 
         [RelayCommand]
@@ -130,6 +134,12 @@ namespace EventManagementSystemUI.ViewModels
         {
             //await LoadEventDetails(eventId);
             //_navigateAction?.Invoke(this);
+        }
+        [RelayCommand]
+        private void ShowNewGroup()
+        {
+            Navigate("NewGroup");
+            ChangeVisibility("NewGroup", true);
         }
     }
 }

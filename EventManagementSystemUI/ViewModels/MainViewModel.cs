@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+
 using System.Net.Http;
 
 namespace EventManagementSystemUI.ViewModels
@@ -11,6 +12,7 @@ namespace EventManagementSystemUI.ViewModels
         public NewEventViewModel NewEventVM { get; }
         public EventDetailsViewModel EventDetailsVM { get; }
         public GroupViewModel GroupVM { get; }
+        public NewGroupViewModel NewGroupVM { get; }
         public NavigationViewModel NavVM { get; }
         public UserViewModel UserVM { get; }
 
@@ -55,9 +57,10 @@ namespace EventManagementSystemUI.ViewModels
             _httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5144/api/") };
             
             EventVM = new EventManagementSystemUI.ViewModels.EventViewModel(_httpClient, this);
-            NewEventVM = new EventManagementSystemUI.ViewModels.NewEventViewModel(_httpClient, this);
+            NewEventVM = new EventManagementSystemUI.ViewModels.NewEventViewModel(_httpClient, this);           
             //EventDetailsVM = new EventManagementSystemUI.ViewModels.EventDetailsViewModel(_httpClient, this);
             GroupVM = new EventManagementSystemUI.ViewModels.GroupViewModel(_httpClient, this);
+            NewGroupVM = new EventManagementSystemUI.ViewModels.NewGroupViewModel(_httpClient, this);
             //GroupDetailsVM = new EventManagementSystemUI.ViewModels.GroupDetailsViewModel(_httpClient, this);
             NavVM = new EventManagementSystemUI.ViewModels.NavigationViewModel(_httpClient, this);
             UserVM = new EventManagementSystemUI.ViewModels.UserViewModel(_httpClient, this);

@@ -17,12 +17,30 @@ public class GroupController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddGroup(Group group)
+    public async Task<IActionResult> AddGroup(GroupBase group)
     {
         // Don't set CreatedAt manually
-        _context.Groups.Add(group);
-        await _context.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetGroups), new { id = group.Id }, group);
+        var newGroup = new Group
+        {
+            Name = group.Name,
+            City = group.City,
+            Description = group.Description,
+            CreatedAt = group.CreatedAt
+        };
+        try
+        {
+            Console.WriteLine($"Trying to save group: {group.Name}");
+            _context.Groups.Add(newGroup);
+            await _context.SaveChangesAsync();
+            Console.WriteLine("Group saved successfully!");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error saving group: {ex.Message}");
+            return StatusCode(500, ex.Message);
+        }
+
+        return Ok(newGroup);
     }
 
     [HttpGet]

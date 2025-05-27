@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="EventManagementSystemUI.Views.NewGroup"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+          xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+          xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+             mc:Ignorable="d"
+          d:DesignHeight="450" d:DesignWidth="800">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="Create New Group" FontSize="24" FontWeight="Bold" 
+                Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,0,20" 
+                HorizontalAlignment="Center"/>
+        <!-- Fix: Replaced 'ElevationAssist.Elevation' with 'ShadowAssist.ShadowDepth' as 'Elevation' is not valid for TextBlock. -->
+
+        <!-- Name -->
+        <TextBlock Grid.Row="1" Text="Name:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5" 
+              Text="{Binding NewGroupVM.NewGroupDraft.Name, UpdateSourceTrigger=PropertyChanged}" 
+              Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
+              materialDesign:HintAssist.Hint="Enter group Name" 
+              materialDesign:HintAssist.IsFloating="True"/>
+        <!-- City -->
+        <TextBlock Grid.Row="2" Text="City:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5" 
+         Text="{Binding NewGroupVM.NewGroupDraft.City, UpdateSourceTrigger=PropertyChanged}" 
+         Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
+         materialDesign:HintAssist.Hint="Enter group city" 
+         materialDesign:HintAssist.IsFloating="True"/>
+        <!-- Description -->
+        <TextBlock Grid.Row="3" Text="Description:" VerticalAlignment="Center" Margin="5" FontSize="14"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="5" Padding="5" 
+              Text="{Binding NewGroupVM.NewGroupDraft.Description, UpdateSourceTrigger=PropertyChanged}" 
+              Height="100" AcceptsReturn="True" TextWrapping="Wrap" 
+              Style="{DynamicResource MaterialDesignOutlinedTextBox}" 
+              materialDesign:HintAssist.Hint="Enter group description" 
+              materialDesign:HintAssist.IsFloating="True"/>
+        
+        <!-- Buttons -->
+        <StackPanel Grid.Row="7" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+            <Button Content="Submit" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
+                    Background="#FF4CAF50" Foreground="White" Command="{Binding NewGroupVM.SubmitNewGroupCommand}"
+                    >
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FF66BB6A" Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FF4CAF50" Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+            <Button Content="Cancel" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
+                    Background="#FF607D8B" Foreground="White" Command="{Binding NewGroupVM.CancelNewGroupCommand}"
+                    >
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="Button.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FF78909C" Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
+                                                To="#FF607D8B" Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

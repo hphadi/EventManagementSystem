@@ -26,7 +26,7 @@ namespace EventManagementSystemUI.ViewModels
         private EventManagementSystem.Models.GroupBase selectedGroup = new();
 
         [RelayCommand]
-        private async Task LoadGroups()
+        public async Task LoadGroups()
         {
             try
             {

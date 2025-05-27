@@ -73,9 +73,31 @@ namespace EventManagementSystemUI.Models
 
         public bool IsValid()
         {
-            return !(string.IsNullOrWhiteSpace(Title) || Title == "Enter name" ||
-                string.IsNullOrWhiteSpace(Description) || Description == "Enter username" ||
-                string.IsNullOrWhiteSpace(Location) || Location == "Enter password");
+            return !(string.IsNullOrWhiteSpace(Title) || Title == "Enter title" ||
+                string.IsNullOrWhiteSpace(Description) || Description == "Enter description" ||
+                string.IsNullOrWhiteSpace(Location) || Location == "Enter location");
+        }
+    }
+
+    public class DraftGroupDto : IDraftClassForm
+    {
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string City { get; set; } = "";
+
+
+        public void Clear()
+        {
+            Name = string.Empty;
+            Description = string.Empty;
+            City = string.Empty;
+        }
+
+        public bool IsValid()
+        {
+            return !(string.IsNullOrWhiteSpace(Name) || Name == "Enter name" ||
+                string.IsNullOrWhiteSpace(Description) || Description == "Enter description" ||
+                string.IsNullOrWhiteSpace(City) || City == "Enter city");
         }
     }
 }
