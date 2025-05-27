@@ -18,7 +18,7 @@ public class PersonController : ControllerBase
 
     // ✅ Sign up (registration)
     [HttpPost("register")]
-    public async Task<IActionResult> Register(Person person)
+    public async Task<IActionResult> Register(Person_ person)
     {
         // Check for duplicate username
         if (await _context.People.AnyAsync(p => p.Username == person.Username))
@@ -58,5 +58,36 @@ public class PersonController : ControllerBase
         _context.People.Remove(person);
         await _context.SaveChangesAsync();
         return NoContent();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<PersonWithEventsDto>> GetPersonDetails(string id)
+    {
+        var person = await _context.People
+            .Where(g => g.Id.ToString() == id)
+            .Include(g => g.EventPersons)
+            .ThenInclude(eg => eg.Event)
+            .Select(g => new PersonWithEventsDto
+            {
+                Id = g.Id,
+                Name = g.Name,
+                Username = g.Username,
+                Events = g.EventPersons
+                    .Select(eg => new SimpleEventDto
+                    {
+                        Id = eg.Event.Id,
+                        Title = eg.Event.Title,
+                        StartDate = eg.Event.StartDate,
+                        Location = eg.Event.Location
+                    }).ToList()
+            })
+            .FirstOrDefaultAsync();
+
+        if (person == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(person);
     }
 }

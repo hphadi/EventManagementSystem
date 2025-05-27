@@ -9,8 +9,9 @@ public class AppDbContext : DbContext
 
     public DbSet<Event> Events { get; set; }
     public DbSet<Group> Groups { get; set; }
-    public DbSet<Person> People { get; set; }
+    public DbSet<Person_> People { get; set; }
     public DbSet<EventGroup> EventGroups { get; set; }
+    public DbSet<EventPerson> EventPersons { get; set; }
     //public DbSet<GroupMember> GroupMembers { get; set; }
 
     //protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,5 +57,18 @@ public class AppDbContext : DbContext
             .HasOne(eg => eg.Group)
             .WithMany(g => g.EventGroups)
             .HasForeignKey(eg => eg.GroupId);
+        
+        modelBuilder.Entity<EventPerson>()
+            .HasKey(ep => new { ep.EventId, ep.PersonId });
+
+        modelBuilder.Entity<EventPerson>()
+            .HasOne(ep => ep.Event)
+            .WithMany(e => e.EventPersons)
+            .HasForeignKey(ep => ep.EventId);
+
+        modelBuilder.Entity<EventPerson>()
+            .HasOne(ep => ep.Person)
+            .WithMany(p => p.EventPersons)
+            .HasForeignKey(ep => ep.PersonId);
     }
 }

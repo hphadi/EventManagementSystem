@@ -28,8 +28,13 @@ namespace EventManagementSystemUI.ViewModels
         [ObservableProperty]
         private NewUser newUserDraft = new();
 
+        public int userId = 0;
+
         [ObservableProperty]
-        private EventManagementSystem.Models.Person currentUser = new();
+        private EventManagementSystem.Models.PersonWithEventsDto currentUser = new();
+
+        [ObservableProperty]
+        private EventManagementSystem.Models.EventWithGroupsDto selectedEvent = new();
 
         [RelayCommand]
         private async Task SubmitRegistration()
@@ -98,13 +103,13 @@ namespace EventManagementSystemUI.ViewModels
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var person = await response.Content.ReadFromJsonAsync<Person>();
-
-                    // Optionally store logged-in user
-                    CurrentUser = person;
+                    var person = await response.Content.ReadFromJsonAsync<Person_>();
 
                     MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    CloseLogInCommand?.Execute(null);
+                    CloseLogInCommand?.Execute(true);
+                    userId = person.Id;
+                    LoadUserDetailsCommand.Execute(null);
+                    _vm.NavVM.NavigateCommand.Execute("Profile");
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -123,7 +128,7 @@ namespace EventManagementSystemUI.ViewModels
 
 
         [RelayCommand]
-        private void CloseLogIn()
+        private void CloseLogIn(bool loggedIn = false)
         {
             _vm.NavVM.Navigate("Dashboard");
             //var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
@@ -131,17 +136,21 @@ namespace EventManagementSystemUI.ViewModels
             //{
             //    frame.Content = new DashboardView { DataContext = this };
             //}
-            if (CurrentUser.Name != string.Empty)
+            if (loggedIn)
             {
                 _vm.NavVM.ChangeVisibility("SignIn", false);
                 _vm.NavVM.ChangeVisibility("Register", false);
                 _vm.NavVM.ChangeVisibility("SignOut", true);
+                _vm.NavVM.ChangeVisibility("Profile", true);
+                _vm.UserButtonsVisibility = Visibility.Visible;
             }
             else
             {
                 _vm.NavVM.ChangeVisibility("SignIn", true);
                 _vm.NavVM.ChangeVisibility("Register", true);
                 _vm.NavVM.ChangeVisibility("SignOut", false);
+                _vm.NavVM.ChangeVisibility("Profile", false);
+                _vm.UserButtonsVisibility = Visibility.Collapsed;
             }
         }
 
@@ -149,7 +158,25 @@ namespace EventManagementSystemUI.ViewModels
         private void SignOut()
         {
             CurrentUser = new();
-            CloseLogInCommand?.Execute(null);
+            CloseLogInCommand?.Execute(false);
+        }
+
+        [RelayCommand]
+        private async Task LoadUserDetails()
+        {
+            if (userId == 0) return;
+            currentUser = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.PersonWithEventsDto>($"person/{userId.ToString()}");
+        }
+        [RelayCommand]
+        private async Task EventSelected()
+        {
+            var selected = SelectedEvent;
+
+            //if (selected is not null)
+            //{
+            //    var data = new NavData(selected.Id, selected.Title);
+            //    _vm.NavVM.AddEventToMenu(data);
+            //}
         }
     }
 }

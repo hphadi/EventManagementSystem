@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace EventManagementSystem.Models;
 
-public class Person
+public class PersonBase
 {
     public int Id { get; set; }
 
@@ -18,10 +19,20 @@ public class Person
     [Required]
     [StringLength(100)]
     public string Password { get; set; } = string.Empty;
-
-    // Navigation property
-    //public List<GroupMember> GroupMembers { get; set; } = new List<GroupMember>();
 }
+
+public class Person_:PersonBase
+{
+    public List<EventPerson> EventPersons { get; set; } = new();
+}
+
+public class PersonWithEventsDto : PersonBase
+{
+    [JsonPropertyName("events")]
+    public List<SimpleEventDto> Events { get; set; } = new();
+}
+
+
 
 public class PersonDto
 {

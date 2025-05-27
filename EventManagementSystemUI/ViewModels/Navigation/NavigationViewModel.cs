@@ -48,7 +48,8 @@ namespace EventManagementSystemUI.ViewModels
             AddNavButton("NewEvent", "New Event", redBrush, Visibility.Collapsed, 12, new Thickness(20, 2, 0, 2));
             AddNavButton("Groups", "Groups");
             AddNavButton("SignOut", "Sign Out", null, Visibility.Collapsed, 14, null, _vm.UserVM.SignOutCommand);
-            //DynamicButtons.Add(new NavigationButton { Id = "NewGroup", Title = "New Group", CommandParameter = "NewGroup", Command = NavigateCommand, Background = redBrush, Visibility = Visibility.Collapsed });
+            AddNavButton("NewGroup", "New Group", redBrush, Visibility.Collapsed, 12, new Thickness(20, 2, 0, 2));
+            AddNavButton("Profile", "Profile", null, Visibility.Collapsed);
             AddNavButton("Register", "Register");
             AddNavButton("SignIn", "Sign In");
 
@@ -91,7 +92,7 @@ namespace EventManagementSystemUI.ViewModels
                 "Groups" => new GroupManagementView { DataContext = _vm },
                 "Profile" => new ProfileView { DataContext = _vm },
                 "NewEvent" => new NewEvent { DataContext = _vm },
-               // "NewGroup" => new NewGroup { DataContext = _vm },
+                "NewGroup" => new NewGroup { DataContext = _vm },
                 "Register" => new SignUpView { DataContext = _vm },
                 "SignIn" => new SignIn { DataContext = _vm },
                 _ => new DashboardView { DataContext = _vm }

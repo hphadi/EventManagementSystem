@@ -64,7 +64,21 @@ public class EventController : ControllerBase
             await _context.SaveChangesAsync();
         }
 
-        return Ok(newEvent);
+        if (dto.PersonIds != null)
+        {
+            foreach (var personId in dto.PersonIds)
+            {
+                _context.EventPersons.Add(new EventPerson
+                {
+                    EventId = newEvent.Id,
+                    PersonId = personId
+                });
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        return Ok(new { id = newEvent.Id });
     }
 
     [HttpGet("{id}")]
