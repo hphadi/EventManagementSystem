@@ -19,21 +19,21 @@ namespace EventManagementSystemUI.ViewModels
             _httpClient = httpClient;
             _vm = vm;
             Id = id;
-            LoadEventDetailsCommand.Execute(Int32.Parse(Id));
+            LoadEventDetailsCommand.Execute(Id);
         }
 
         [ObservableProperty]
         private EventManagementSystem.Models.EventWithGroupsDto selectedEvent = new();
 
         [RelayCommand]
-        private async Task LoadEventDetails(int eventId)
+        private async Task LoadEventDetails(string eventId)
         {
-            SelectedEvent = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.EventWithGroupsDto>($"event/{eventId}");
+            SelectedEvent = await _httpClient.GetFromJsonAsync<EventWithGroupsDto>($"event/{eventId}");
         }
         [RelayCommand]
         private async Task Close()
         {
-            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "e" + Id));
+            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "e" + Id.ToString()));
             _vm.NavVM.NavigateCommand.Execute("Events");
         }
 

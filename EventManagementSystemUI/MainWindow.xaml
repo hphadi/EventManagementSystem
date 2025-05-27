@@ -25,7 +25,9 @@
                         CommandParameter="{Binding CommandParameter}"
                         Visibility="{Binding Visibility}"
                         Background="{Binding Background}"
-                        Margin="5"
+                        FontWeight="{Binding FontWeight}"
+                        FontSize="{Binding FontSize}"
+                        Margin="{Binding Margin}"
                         Style="{StaticResource MaterialDesignRaisedButton}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

@@ -12,7 +12,15 @@ namespace EventManagementSystemUI
         {
             InitializeComponent();
             DataContext = _viewModel;
+            Loaded += MainWindow_Loaded;
+        }
 
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is MainViewModel vm)
+            {
+                vm.NavVM.NavigateCommand.Execute("Dashboard");
+            }
         }
     }
 }

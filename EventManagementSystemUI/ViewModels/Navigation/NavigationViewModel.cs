@@ -1,115 +1,170 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using EventManagementSystemUI.Models;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
-using System.Windows.Media;
-using System.Windows;
-using CommunityToolkit.Mvvm.Input;
-using EventManagementSystemUI.Views;
 using System.Net.Http.Json;
-using Microsoft.Extensions.Logging;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using EventManagementSystem.Models;
+using EventManagementSystemUI.Models;
+using EventManagementSystemUI.Views;
+using Microsoft.Extensions.Logging;
 
 namespace EventManagementSystemUI.ViewModels
 {
+    public record NavData(int Id, string Title);
+    public record NavDataPrefix(String prefix, int Id, string Title);
     public partial class NavigationViewModel : ObservableObject
     {
         private readonly HttpClient _httpClient;
         private readonly MainViewModel _vm;
+        private readonly Brush redBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF32B21"));
 
         public NavigationViewModel(HttpClient httpClient, MainViewModel vm)
         {
             _httpClient = httpClient;
             _vm = vm;
         }
+        [ObservableProperty]
+        private FontWeight fontWeight = FontWeights.Normal;
+
+        [ObservableProperty]
+        private double fontSize = 14; // default
+
+        [ObservableProperty]
+        private Thickness margin = new(5); // default
 
         public ObservableCollection<NavigationButton> DynamicButtons { get; } = new();
 
+        private void NavigateToView(UserControl view) =>
+            (Application.Current.MainWindow.FindName("MainFrame") as Frame)!.Content = view;
+
         public void LoadButtons()
         {
-            var redBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFF32B21"));
-            DynamicButtons.Add(new NavigationButton { Id = "Dashboard", Title = "Dashboard", CommandParameter = "Dashboard", Command = NavigateCommand });
-            DynamicButtons.Add(new NavigationButton { Id = "Events", Title = "Events", CommandParameter = "Events", Command = NavigateCommand });
-            DynamicButtons.Add(new NavigationButton { Id = "Groups", Title = "Groups", CommandParameter = "Groups", Command = NavigateCommand });
-            DynamicButtons.Add(new NavigationButton { Id = "NewEvent", Title = "New Event", CommandParameter = "NewEvent", Command = NavigateCommand, Background = redBrush, Visibility = Visibility.Collapsed });
-            DynamicButtons.Add(new NavigationButton { Id = "SignOut", Title = "Sign Out", Command = _vm.UserVM.SignOutCommand, Visibility = Visibility.Collapsed });
-            DynamicButtons.Add(new NavigationButton { Id = "Register", Title = "Register", CommandParameter = "Register", Command = NavigateCommand });
-            DynamicButtons.Add(new NavigationButton { Id = "SignIn", Title = "Sign In", CommandParameter = "SignIn", Command = NavigateCommand });
+            AddNavButton("Dashboard", "Dashboard");
+            AddNavButton("Events", "Events");
+            AddNavButton("NewEvent", "New Event", redBrush, Visibility.Collapsed, 12, new Thickness(20, 2, 0, 2));
+            AddNavButton("Groups", "Groups");
+            AddNavButton("SignOut", "Sign Out", null, Visibility.Collapsed, 14, null, _vm.UserVM.SignOutCommand);
+            AddNavButton("Register", "Register");
+            AddNavButton("SignIn", "Sign In");
         }
+
+
+        private void AddNavButton(
+            string id,
+            string title,
+            Brush? background = null,
+            Visibility visibility = Visibility.Visible,
+            double fontSize = 14,
+            Thickness? margin = null,
+            IRelayCommand? command = null)
+        {
+                    DynamicButtons.Add(new NavigationButton
+                    {
+                        Id = id,
+                        Title = title,
+                        Command = command ?? NavigateCommand,
+                        CommandParameter = id,
+                        Background = background,
+                        Visibility = visibility,
+                        FontWeight = FontWeights.Normal,
+                        FontSize = fontSize,
+                        Margin = margin ?? new Thickness(5)
+                    });
+                }
+
 
         [RelayCommand]
         public void Navigate(string page)
         {
-            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-            if (frame == null) return;
+            HighlightButton(page);
 
-            switch (page)
+            NavigateToView(page switch
             {
-                case "Dashboard":
-                    frame.Content = new DashboardView { DataContext = _vm };
-                    break;
-                case "Events":
-                    frame.Content = new EventManagementView { DataContext = _vm };
-                    break;
-                case "Groups":
-                    frame.Content = new GroupManagementView { DataContext = _vm };
-                    break;
-                //case "GroupDetails":
-                //    frame.Content = new GroupDetailsView { DataContext = _vm };
-                //    break;
-                case "Profile":
-                    frame.Content = new ProfileView { DataContext = _vm };
-                    break;
-                case "NewEvent":
-                    frame.Content = new NewEvent { DataContext = _vm };
-                    break;
-                case "Register":
-                    frame.Content = new SignUpView { DataContext = _vm };
-                    break;
-                case "SignIn":
-                    frame.Content = new SignIn { DataContext = _vm };
-                    break;
-            }
+                "Dashboard" => new DashboardView { DataContext = _vm },
+                "Events" => new EventManagementView { DataContext = _vm },
+                "Groups" => new GroupManagementView { DataContext = _vm },
+                "Profile" => new ProfileView { DataContext = _vm },
+                "NewEvent" => new NewEvent { DataContext = _vm },
+                "Register" => new SignUpView { DataContext = _vm },
+                "SignIn" => new SignIn { DataContext = _vm },
+                _ => new DashboardView { DataContext = _vm }
+            });
         }
 
         [RelayCommand]
         public void GroupDetails(string groupId)
         {
-            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-            var Vm = new EventManagementSystemUI.ViewModels.GroupDetailsViewModel(_httpClient, _vm, groupId);
-            frame.Content = new GroupDetailsView { DataContext = Vm};
+            HighlightButton("g" + groupId.ToString());
+            var vm = new GroupDetailsViewModel(_httpClient, _vm, groupId);
+            NavigateToView(new GroupDetailsView { DataContext = vm });
         }
 
         [RelayCommand]
         public void EventDetails(string eventId)
         {
-            var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-            var Vm = new EventManagementSystemUI.ViewModels.EventDetailsViewModel(_httpClient, _vm, eventId);
-            frame.Content = new EventDetailsView { DataContext = Vm };
+            HighlightButton("e" + eventId);
+            var vm = new EventDetailsViewModel(_httpClient, _vm, eventId);
+            NavigateToView(new EventDetailsView { DataContext = vm });
         }
 
         [RelayCommand]
-        public void AddEventToMenu(EventNavData data)
+        public void AddEventToMenu(NavData data)
         {
-            _vm.NavVM.DynamicButtons.Add(new NavigationButton
+            var prefixed = new NavDataPrefix("e", data.Id, data.Title);
+            AddToMenuCommand.Execute(prefixed);
+            EventDetailsCommand.Execute(data.Id.ToString());
+        }
+
+        [RelayCommand]
+        public void AddGroupToMenu(NavData data)
+        {
+            var prefixed = new NavDataPrefix("g", data.Id, data.Title);
+            AddToMenuCommand.Execute(prefixed);
+            GroupDetailsCommand.Execute(data.Id.ToString());
+        }
+
+
+
+        [RelayCommand]
+        public void AddToMenu(NavDataPrefix data)
+        {
+            string id_ = data.prefix + data.Id.ToString();
+            if (DynamicButtons.Any(b => b.Id == id_))
+                return;
+
+            var newButton = new NavigationButton
             {
-                Id = "e" + data.Id,
-                Title = data.Title,
-                CommandParameter = data.Id,
-                Command = _vm.NavVM.EventDetailsCommand
-            });
+                Id = id_,
+                Title = "  " + data.Title, // Indent for visual grouping
+                Command = data.prefix == "g" ? GroupDetailsCommand : EventDetailsCommand,
+                CommandParameter = id_,
+                FontWeight = FontWeights.Normal,
+                FontSize = 12, // Smaller
+                Margin = new Thickness(20, 2, 0, 2) // Indented
+            };
 
-            _vm.NavVM.EventDetails(data.Id);
+            string anchorId = data.prefix == "e" ? "Events" : "Groups";
+            int insertIndex = DynamicButtons.ToList().FindIndex(b => b.Id == anchorId);
+
+            if (insertIndex != -1)
+                DynamicButtons.Insert(insertIndex + 1, newButton);
+            else
+                DynamicButtons.Add(newButton); // fallback
         }
 
-        public NavigationButton? GetButtonById(string id)
-        {
-            return DynamicButtons.FirstOrDefault(b => b.Id == id);
-        }
+
+        public NavigationButton? GetButtonById(string id) =>
+            DynamicButtons.FirstOrDefault(b => b.Id == id);
+
         public void ChangeVisibility(string id, bool visible)
         {
-            NavigationButton n = GetButtonById(id);
-            n.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            var button = GetButtonById(id);
+            if (button != null)
+                button.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
         }
 
         [RelayCommand]
@@ -117,19 +172,12 @@ namespace EventManagementSystemUI.ViewModels
         {
             Navigate("NewEvent");
             ChangeVisibility("NewEvent", true);
-            //var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-            //if (frame != null)
-            //{
-            //    frame.Content = new NewEvent { DataContext = _vm };
-            //    ChangeVisibility("NewEvent", true);
-//}
         }
 
-        [RelayCommand]
-        public async Task NavigateToEventDetails(int eventId)
+        private void HighlightButton(string id)
         {
-            //await LoadEventDetails(eventId);
-            //_navigateAction?.Invoke(this);
+            foreach (var button in DynamicButtons)
+                button.FontWeight = button.Id == id ? FontWeights.Bold : FontWeights.Normal;
         }
     }
 }

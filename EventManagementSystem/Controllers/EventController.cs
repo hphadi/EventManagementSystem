@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks; 
-using EventManagementSystem.Data;
+﻿using EventManagementSystem.Data;
 using EventManagementSystem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -67,19 +66,12 @@ public class EventController : ControllerBase
 
         return Ok(newEvent);
     }
-    //public async Task<ActionResult<Event>> CreateEvent(Event newEvent)
-    //{
-    //    _context.Events.Add(newEvent);
-    //    await _context.SaveChangesAsync();
-    //    return Ok(newEvent);
-    //}
 
-    //get Event with ID
     [HttpGet("{id}")]
     public async Task<ActionResult<EventWithGroupsDto>> GetEventDetails(int id)
     {
         var ev = await _context.Events
-            .Where(e => e.Id == id)
+            .Where(e => e.Id == id) // ✅ Efficient and index-friendly
             .Select(e => new EventWithGroupsDto
             {
                 Id = e.Id,
@@ -99,25 +91,6 @@ public class EventController : ControllerBase
             })
             .FirstOrDefaultAsync();
 
-        if (ev == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(ev);
+        return ev == null ? NotFound() : Ok(ev);
     }
-
-
-    //// assign Event to Group
-    //[HttpPost("{eventId}/assign-group/{groupId}")]
-    //public async Task<IActionResult> AssignEventToGroup(int eventId, int groupId)
-    //{
-    //    var eventEntity = await _context.Events.FindAsync(eventId);
-    //    var group = await _context.Groups.FindAsync(groupId);
-    //    if (eventEntity == null || group == null) return NotFound();
-
-    //    //_context.EventGroups.Add(new EventGroup { EventId = eventId, GroupId = groupId });
-    //    await _context.SaveChangesAsync();
-    //    return NoContent();
-    //}
 }

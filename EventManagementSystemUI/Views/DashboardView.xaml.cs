@@ -1,8 +1,5 @@
-﻿using System.Windows.Controls;
-using EventManagementSystemUI.ViewModels;
+﻿using EventManagementSystemUI.ViewModels;
 using WPF = System.Windows; // for WPF
-using System.Windows.Input;
-using Microsoft.AspNetCore.Builder;
 
 
 namespace EventManagementSystemUI.Views;
@@ -12,6 +9,15 @@ public partial class DashboardView : WPF.Controls.UserControl
     public DashboardView()
     {
         InitializeComponent();
+        this.Loaded += DashboardView_Loaded;
+    }
+
+    private void DashboardView_Loaded(object sender, WPF.RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm)
+        {
+            vm.EventVM?.LoadEventsCommand.Execute(null);
+        }
     }
 
     private void ListView_MouseDoubleClick(object sender, WPF.Input.MouseButtonEventArgs e)
