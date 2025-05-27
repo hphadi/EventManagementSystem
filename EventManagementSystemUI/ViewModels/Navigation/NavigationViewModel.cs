@@ -145,7 +145,7 @@ namespace EventManagementSystemUI.ViewModels
                 Id = id_,
                 Title = "  " + data.Title, // Indent for visual grouping
                 Command = data.prefix == "g" ? GroupDetailsCommand : EventDetailsCommand,
-                CommandParameter = id_,
+                CommandParameter = data.Id.ToString(),
                 FontWeight = FontWeights.Normal,
                 FontSize = 12, // Smaller
                 Margin = new Thickness(20, 2, 0, 2) // Indented

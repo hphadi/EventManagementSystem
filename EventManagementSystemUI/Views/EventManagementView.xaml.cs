@@ -2,8 +2,6 @@
 using System.Windows.Controls;
 using WPF = System.Windows; // for WPF
 namespace EventManagementSystemUI.Views;
-using System.Windows.Input;
-using CommunityToolkit.Mvvm.Input;
 
 public partial class EventManagementView : WPF.Controls.UserControl
 {

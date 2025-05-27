@@ -34,7 +34,7 @@ namespace EventManagementSystemUI.ViewModels
         private EventManagementSystem.Models.PersonWithEventsDto currentUser = new();
 
         [ObservableProperty]
-        private EventManagementSystem.Models.EventWithGroupsDto selectedEvent = new();
+        private EventManagementSystem.Models.SimpleEventDto selectedEvent;
 
         [RelayCommand]
         private async Task SubmitRegistration()
@@ -130,7 +130,6 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private void CloseLogIn(bool loggedIn = false)
         {
-            _vm.NavVM.Navigate("Dashboard");
             //var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
             //if (frame != null)
             //{
@@ -142,6 +141,8 @@ namespace EventManagementSystemUI.ViewModels
                 _vm.NavVM.ChangeVisibility("Register", false);
                 _vm.NavVM.ChangeVisibility("SignOut", true);
                 _vm.NavVM.ChangeVisibility("Profile", true);
+                _vm.UserVM?.LoadUserDetailsCommand.Execute(null);
+                _vm.NavVM.Navigate("Profile");
                 _vm.UserButtonsVisibility = Visibility.Visible;
             }
             else
@@ -150,6 +151,7 @@ namespace EventManagementSystemUI.ViewModels
                 _vm.NavVM.ChangeVisibility("Register", true);
                 _vm.NavVM.ChangeVisibility("SignOut", false);
                 _vm.NavVM.ChangeVisibility("Profile", false);
+                _vm.NavVM.Navigate("Dashboard");
                 _vm.UserButtonsVisibility = Visibility.Collapsed;
             }
         }
@@ -170,13 +172,11 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task EventSelected()
         {
-            var selected = SelectedEvent;
-
-            //if (selected is not null)
-            //{
-            //    var data = new NavData(selected.Id, selected.Title);
-            //    _vm.NavVM.AddEventToMenu(data);
-            //}
+            if (SelectedEvent is not null)
+            {
+                var data = new NavData(SelectedEvent.Id, SelectedEvent.Title);
+                _vm.NavVM.AddEventToMenu(data);
+            }
         }
     }
 }
