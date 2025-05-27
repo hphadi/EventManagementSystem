@@ -7,11 +7,9 @@ using CommunityToolkit.Mvvm.Input;
 
 public partial class EventManagementView : WPF.Controls.UserControl
 {
-    private readonly MainViewModel _viewModel = new MainViewModel();
     public EventManagementView()
     {
         InitializeComponent();
-        DataContext = _viewModel;
     }
 
     private void ListView_MouseDoubleClick(object sender, WPF.Input.MouseButtonEventArgs e)

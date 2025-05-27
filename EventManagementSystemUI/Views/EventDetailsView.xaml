@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <StackPanel Grid.Row="0" Margin="0,0,0,20" materialDesign:ElevationAssist.Elevation="Dp2">
         <DockPanel>
-            <TextBlock Text="{Binding SelectedEvent.Name}" 
+            <TextBlock Text="{Binding SelectedEvent.Title}" 
                Style="{StaticResource MaterialDesignHeadline4TextBlock}" 
                Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,10,0"
                DockPanel.Dock="Left"/>
@@ -33,7 +33,6 @@
             <!-- Event Info -->
             <materialDesign:Card Grid.Column="0" Margin="0,0,10,0" Padding="10">
                 <StackPanel>
-                    <TextBlock Text="{Binding SelectedEvent.Title}" Style="{StaticResource MaterialDesignHeadline6TextBlock}" FontWeight="Bold" Margin="0,0,0,5"/>
                     <TextBlock Text="Start Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,0,0,5"/>
                     <TextBlock Text="{Binding SelectedEvent.StartDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
                     <TextBlock Text="End Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>

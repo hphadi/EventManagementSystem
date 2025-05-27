@@ -13,12 +13,12 @@ public string Location { get; set; } = string.Empty;
 
 public class Event : EventBase
 {
-    public List<EventGroup> EventGroups { get; set; } = new();
+    public List<EventGroup> EventGroups = [];
 }
 
 public class EventWithGroupsDto : EventBase
 {
-    public List<SimpleGroupDto> Groups { get; set; } = new();
+    public List<SimpleGroupDto> Groups = [];
 }
 
 public class SimpleGroupDto

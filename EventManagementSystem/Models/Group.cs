@@ -10,12 +10,12 @@ public class GroupBase
 
 public class Group:GroupBase
 {
-    public List<EventGroup> EventGroups { get; set; } = new();
+    public List<EventGroup> EventGroups = [];
 }
 
 public class GroupWithEventsDto:GroupBase
 {
-    public List<SimpleEventDto> Events { get; set; } = new();
+    public List<SimpleEventDto> Events = [];
 }
 
 public class SimpleEventDto
