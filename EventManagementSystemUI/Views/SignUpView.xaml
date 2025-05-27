@@ -72,7 +72,7 @@
         <!-- Buttons -->
         <StackPanel Grid.Row="5" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
             <Button Content="Submit" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
-                    Background="#FF4CAF50" Foreground="White"  Click="Submit_Click" Command="{Binding SubmitRegistrationCommand}"
+                    Background="#FF4CAF50" Foreground="White"  Click="Submit_Click" Command="{Binding UserVM.SubmitRegistrationCommand}"
                     >
                 <Button.Triggers>
                     <EventTrigger RoutedEvent="Button.MouseEnter">
@@ -94,7 +94,7 @@
                 </Button.Triggers>
             </Button>
             <Button Content="Cancel" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
-                    Background="#FF607D8B" Foreground="White" Command="{Binding CloseLogInCommand}"
+                    Background="#FF607D8B" Foreground="White" Command="{Binding UserVM.CloseLogInCommand}"
                     >
                 <Button.Triggers>
                     <EventTrigger RoutedEvent="Button.MouseEnter">
