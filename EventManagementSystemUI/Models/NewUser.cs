@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace EventManagementSystemUI.Models
 {
+    public interface IDraftClassForm
+    {
+        public void Clear();
+        public bool IsValid();
+    }
     public class NewUser
     {
         public string Name { get; set; } = "";
@@ -30,7 +35,7 @@ namespace EventManagementSystemUI.Models
         }
     }
 
-    public class LoginUser
+    public class LoginUser : IDraftClassForm
     {
         public string UserName { get; set; } = "";
         public string Password { get; set; } = "";
@@ -48,7 +53,7 @@ namespace EventManagementSystemUI.Models
         }
     }
 
-    public class NewEventDto
+    public class NewEventDto : IDraftClassForm
     {
         public string Title { get; set; } = "";
         public string Description { get; set; } = "";
