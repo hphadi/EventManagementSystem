@@ -10,5 +10,6 @@
         public string Location { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public List<int>? GroupIds { get; set; }
+        public List<int>? PersonIds { get; set; }
     }
 }

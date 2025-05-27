@@ -3,7 +3,6 @@ using System.Windows.Controls;
 using WPF = System.Windows; // for WPF
 namespace EventManagementSystemUI.Views;
 using System.ComponentModel;
-
 using System.Windows;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;

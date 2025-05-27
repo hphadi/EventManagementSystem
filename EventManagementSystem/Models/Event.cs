@@ -14,6 +14,7 @@ public string Location { get; set; } = string.Empty;
 public class Event : EventBase
 {
     public List<EventGroup> EventGroups = [];
+    public List<EventPerson> EventPersons { get; set; } = new();
 }
 
 public class EventWithGroupsDto : EventBase

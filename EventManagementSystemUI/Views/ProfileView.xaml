@@ -22,6 +22,15 @@
                 <Run Text="{Binding UserVM.CurrentUser.Username}" />
             </TextBlock>
             <TextBlock Text="Groups: Group A, Group B" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="10" />
+            <ListView Grid.Row="1" ItemsSource="{Binding UserVM.CurrentUser.Events}" Height="300" SelectedItem="{Binding UserVM.SelectedEvent, Mode=TwoWay}" MouseDoubleClick="ListView_MouseDoubleClick">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="200"/>
+                        <GridViewColumn Header="Start Date" DisplayMemberBinding="{Binding StartDate, StringFormat=dd/MM/yyyy HH:mm}" Width="150"/>
+                        <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" Width="200"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
         </StackPanel>
     </Grid>
 </UserControl>

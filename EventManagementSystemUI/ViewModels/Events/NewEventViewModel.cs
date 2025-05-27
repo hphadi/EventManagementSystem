@@ -56,7 +56,8 @@ namespace EventManagementSystemUI.ViewModels
                 EndDate = endDateUtc,
                 Location = NewEventDraft.Location,
                 CreatedAt = DateTime.Now.ToUniversalTime(),
-                GroupIds = SelectedGroups.IsNullOrEmpty()? null : SelectedGroups.Select(g => g.Id).ToList()
+                GroupIds = SelectedGroups.IsNullOrEmpty()? null : SelectedGroups.Select(g => g.Id).ToList(),
+                PersonIds = new List<int> { _vm.UserVM.CurrentUser.Id}
             };
 
 //            var newEvent = new EventManagementSystem.Models.EventDto

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 using System.Net.Http;
+using System.Windows;
 
 namespace EventManagementSystemUI.ViewModels
 {
@@ -16,6 +17,9 @@ namespace EventManagementSystemUI.ViewModels
         public NavigationViewModel NavVM { get; }
         public UserViewModel UserVM { get; }
 
+        [ObservableProperty]
+        private Visibility userButtonsVisibility = Visibility.Collapsed;
+
         public MainViewModel()
         {
             _httpClient = new HttpClient { BaseAddress = new Uri("http://localhost:5144/api/") };
@@ -24,7 +28,6 @@ namespace EventManagementSystemUI.ViewModels
             NewEventVM = new EventManagementSystemUI.ViewModels.NewEventViewModel(_httpClient, this);
             GroupVM = new EventManagementSystemUI.ViewModels.GroupViewModel(_httpClient, this);
             NewGroupVM = new EventManagementSystemUI.ViewModels.NewGroupViewModel(_httpClient, this);
-            //GroupDetailsVM = new EventManagementSystemUI.ViewModels.GroupDetailsViewModel(_httpClient, this);
             NavVM = new EventManagementSystemUI.ViewModels.NavigationViewModel(_httpClient, this);
             UserVM = new EventManagementSystemUI.ViewModels.UserViewModel(_httpClient, this);
             
