@@ -39,12 +39,14 @@ namespace EventManagementSystemUI.ViewModels
         private async Task SubmitNewEvent()
         {
 
-            if (!NewEventDraft.IsValid())
+            if (!NewEventDraft.ShowValidationErrorsIfInvalid())
+                return;
+
+            if (NewEventDraft.StartDateTime == null || NewEventDraft.EndDateTime == null)
             {
-                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please select both start and end date/time.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
             var startDateUtc = NewEventDraft.StartDateTime.Value.ToUniversalTime();
             var endDateUtc = NewEventDraft.EndDateTime.Value.ToUniversalTime();
 

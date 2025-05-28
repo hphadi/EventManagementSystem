@@ -35,12 +35,8 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task SubmitNewGroup()
         {
-
-            if (!NewGroupDraft.IsValid())
-            {
-                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!NewGroupDraft.ShowValidationErrorsIfInvalid())
                 return;
-            }
 
             var newGroup = new NewGroupDto
             {

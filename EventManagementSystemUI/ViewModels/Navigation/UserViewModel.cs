@@ -41,16 +41,8 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task SubmitRegistration()
         {
-            if (NewUserDraft.IsValid() == false)
-            {
-                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            if (!NewUserDraft.ShowValidationErrorsIfInvalid())
                 return;
-            }
-            else if (NewUserDraft.Password != NewUserDraft.RepeatPassword)
-            {
-                MessageBox.Show("Passwords do not match.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
 
             var newUser = new PersonDto
             {
@@ -87,11 +79,9 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task SubmitSignIn()
         {
-            if (LoginUser.IsValid() == false)
-            {
-                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+            if (!LoginUser.ShowValidationErrorsIfInvalid())
                 return;
-            }
 
             var loginRequest = new EventManagementSystem.Models.LoginDto
             {
