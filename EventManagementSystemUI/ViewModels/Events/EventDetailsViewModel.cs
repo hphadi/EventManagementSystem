@@ -33,7 +33,11 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task Close()
         {
-            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "e" + Id.ToString()));
+            var buttonToRemove = _vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "e" + Id.ToString());
+            if (buttonToRemove != null)
+            {
+                _vm.NavVM.DynamicButtons.Remove(buttonToRemove);
+            }
             _vm.NavVM.NavigateCommand.Execute("Events");
         }
 
