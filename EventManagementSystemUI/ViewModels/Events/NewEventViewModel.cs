@@ -5,6 +5,7 @@ using EventManagementSystemUI.Models;
 using EventManagementSystemUI.Views;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Windows;
@@ -77,7 +78,8 @@ namespace EventManagementSystemUI.ViewModels
                 {
                     MessageBox.Show("Event created successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     await _vm.EventVM.LoadEvents();
-                    CancelNewEventCommand.Execute(null);
+                    if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                        CancelNewEventCommand.Execute(null);
                 }
                 else
                 {

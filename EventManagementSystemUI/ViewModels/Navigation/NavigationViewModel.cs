@@ -71,7 +71,7 @@ namespace EventManagementSystemUI.ViewModels
                         Title = title,
                         Command = command ?? NavigateCommand,
                         CommandParameter = id,
-                        Background = background,
+                        Background = background ?? Brushes.LightGray,
                         Visibility = visibility,
                         FontWeight = FontWeights.Normal,
                         FontSize = fontSize,

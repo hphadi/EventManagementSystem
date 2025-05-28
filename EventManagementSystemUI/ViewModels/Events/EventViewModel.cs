@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using EventManagementSystem.Models;
 using EventManagementSystemUI.Models;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Windows;
@@ -24,7 +25,8 @@ namespace EventManagementSystemUI.ViewModels
         {
             _httpClient = httpClient;
             _vm = vm;
-            LoadEventsCommand.Execute(null);
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                LoadEventsCommand.Execute(null);
         }
 
         [ObservableProperty]

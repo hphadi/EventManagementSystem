@@ -1,4 +1,6 @@
-﻿using EventManagementSystemUI.ViewModels;
+﻿using System.ComponentModel;
+using System.Windows;
+using EventManagementSystemUI.ViewModels;
 using WPF = System.Windows; // for WPF
 using System.Windows.Controls;
 
@@ -17,7 +19,8 @@ public partial class DashboardView : WPF.Controls.UserControl
     {
         if (DataContext is MainViewModel vm)
         {
-            vm.EventVM?.LoadEventsCommand.Execute(null);
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                vm.EventVM?.LoadEventsCommand.Execute(null);
         }
     }
 
