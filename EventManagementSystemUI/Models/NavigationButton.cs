@@ -8,16 +8,16 @@ namespace EventManagementSystemUI.Models
     public partial class NavigationButton : ObservableObject
     {
         [ObservableProperty]
-        private string id;
+        private string id = string.Empty;
 
         [ObservableProperty]
-        private string title;
+        private string title = string.Empty;
 
         [ObservableProperty]
-        private string commandParameter;
+        private string commandParameter = string.Empty;
 
         [ObservableProperty]
-        private ICommand command;
+        private ICommand command = null!;
 
         [ObservableProperty]
         private Brush background = Brushes.LightGray;
