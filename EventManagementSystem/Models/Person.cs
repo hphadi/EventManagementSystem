@@ -24,12 +24,16 @@ public class PersonBase
 public class Person_:PersonBase
 {
     public List<EventPerson> EventPersons { get; set; } = new();
+    public List<GroupPerson> GroupPersons { get; set; } = new();
 }
 
-public class PersonWithEventsDto : PersonBase
+public class PersonWithDetailsDto : PersonBase
 {
     [JsonPropertyName("events")]
     public List<SimpleEventDto> Events { get; set; } = new();
+
+    [JsonPropertyName("groups")]
+    public List<SimpleGroupDto> Groups { get; set; } = new();
 }
 
 

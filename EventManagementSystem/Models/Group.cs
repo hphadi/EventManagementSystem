@@ -14,6 +14,7 @@ public class GroupBase
 public class Group : GroupBase
 {
     public List<EventGroup> EventGroups { get; set; } = new();
+    public List<GroupPerson> GroupPersons { get; set; } = new();
 }
 
 public class GroupWithEventsDto : GroupBase

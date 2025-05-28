@@ -4,25 +4,38 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-               xmlns:local="clr-namespace:EventManagementSystemUI.Views"
-            xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-            xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels" d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
-               mc:Ignorable="d"
-            d:DesignHeight="450" d:DesignWidth="800">
+             xmlns:local="clr-namespace:EventManagementSystemUI.Views"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=vm:MainViewModel}">
 
-    <Grid Margin="10">
-        <StackPanel>
+    <UserControl.Resources>
+        <local:GroupListToStringConverter x:Key="GroupListToStringConverter" />
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
             <TextBlock Text="User Profile" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Margin="10" />
+
             <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="10">
                 <Run Text="Name: " />
                 <Run Text="{Binding UserVM.CurrentUser.Name}" />
             </TextBlock>
+
             <TextBlock Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="10">
                 <Run Text="Username: " />
                 <Run Text="{Binding UserVM.CurrentUser.Username}" />
             </TextBlock>
-            <TextBlock Text="Groups: Group A, Group B" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="10" />
-            <ListView Grid.Row="1" ItemsSource="{Binding UserVM.CurrentUser.Events}" Height="300" SelectedItem="{Binding UserVM.SelectedEvent, Mode=TwoWay}" MouseDoubleClick="ListView_MouseDoubleClick">
+
+            <TextBlock Text="{Binding UserVM.CurrentUser.Groups, Converter={StaticResource GroupListToStringConverter}}"
+                       Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="10" />
+
+            <ListView ItemsSource="{Binding UserVM.CurrentUser.Events}"
+                      Height="300"
+                      SelectedItem="{Binding UserVM.SelectedEvent, Mode=TwoWay}"
+                      MouseDoubleClick="ListView_MouseDoubleClick">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="200"/>
@@ -32,5 +45,5 @@
                 </ListView.View>
             </ListView>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </UserControl>

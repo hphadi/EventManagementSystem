@@ -4,10 +4,12 @@ using EventManagementSystem.Models;
 using EventManagementSystemUI.Models;
 using EventManagementSystemUI.Tools;
 using EventManagementSystemUI.Views;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Windows;
+using System.Windows.Data;
 
 namespace EventManagementSystemUI.ViewModels
 {
@@ -31,7 +33,7 @@ namespace EventManagementSystemUI.ViewModels
         public int userId = 0;
 
         [ObservableProperty]
-        private EventManagementSystem.Models.PersonWithEventsDto currentUser = new();
+        private EventManagementSystem.Models.PersonWithDetailsDto currentUser = new();
 
         [ObservableProperty]
         private EventManagementSystem.Models.SimpleEventDto selectedEvent = new();
@@ -165,7 +167,7 @@ namespace EventManagementSystemUI.ViewModels
         private async Task LoadUserDetails()
         {
             if (userId == 0) return;
-            var user = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.PersonWithEventsDto>($"person/{userId.ToString()}");
+            var user = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.PersonWithDetailsDto>($"person/{userId.ToString()}");
             if (user != null)
             {
                 CurrentUser = user;

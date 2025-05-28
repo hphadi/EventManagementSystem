@@ -61,13 +61,13 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<PersonWithEventsDto>> GetPersonDetails(string id)
+    public async Task<ActionResult<PersonWithDetailsDto>> GetPersonDetails(string id)
     {
         var person = await _context.People
             .Where(g => g.Id.ToString() == id)
             .Include(g => g.EventPersons)
             .ThenInclude(eg => eg.Event)
-            .Select(g => new PersonWithEventsDto
+            .Select(g => new PersonWithDetailsDto
             {
                 Id = g.Id,
                 Name = g.Name,
@@ -79,6 +79,13 @@ public class PersonController : ControllerBase
                         Title = eg.Event.Title,
                         StartDate = eg.Event.StartDate,
                         Location = eg.Event.Location
+                    }).ToList(),
+                Groups = g.GroupPersons
+                    .Select(eg => new SimpleGroupDto
+                    {
+                        Id = eg.Group.Id,
+                        Name = eg.Group.Name,
+                        City = eg.Group.City
                     }).ToList()
             })
             .FirstOrDefaultAsync();

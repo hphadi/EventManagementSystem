@@ -4,68 +4,73 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels" d:DataContext="{d:DesignInstance Type=vm:EventDetailsViewModel}"
+             xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels"
+             d:DataContext="{d:DesignInstance Type=vm:EventDetailsViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Grid.Row="0" Margin="0,0,0,20" materialDesign:ElevationAssist.Elevation="Dp2">
-        <DockPanel>
-            <TextBlock Text="{Binding SelectedEvent.Title}" 
-               Style="{StaticResource MaterialDesignHeadline4TextBlock}" 
-               Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,10,0"
-               DockPanel.Dock="Left"/>
-            <Button Content="Close" 
-            Command="{Binding CloseCommand}" 
-            DockPanel.Dock="Right" 
-            ToolTip="Close"
-            Style="{StaticResource MaterialDesignFlatButton}" 
-            Foreground="Red" 
-            HorizontalAlignment="Right" 
-            />
-        </DockPanel>
 
-        <!-- Event Details -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10" materialDesign:ElevationAssist.Elevation="Dp2">
 
-            <!-- Event Info -->
-            <materialDesign:Card Grid.Column="0" Margin="0,0,10,0" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="Start Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,0,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.StartDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
-                    <TextBlock Text="End Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.EndDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
-                    <TextBlock Text="Location:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.Location}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
-                    <TextBlock Text="Description:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
-                    <TextBlock Text="{Binding SelectedEvent.Description}" Style="{StaticResource MaterialDesignBody2TextBlock}" TextWrapping="Wrap"/>
-                </StackPanel>
-            </materialDesign:Card>
+            <!-- Header -->
+            <DockPanel Margin="0,0,0,20">
+                <TextBlock Text="{Binding SelectedEvent.Title}" 
+                           Style="{StaticResource MaterialDesignHeadline4TextBlock}" 
+                           Foreground="{DynamicResource MaterialDesignBody}" Margin="0,0,10,0"
+                           DockPanel.Dock="Left"/>
+                <Button Content="Close" 
+                        Command="{Binding CloseCommand}" 
+                        DockPanel.Dock="Right" 
+                        ToolTip="Close"
+                        Style="{StaticResource MaterialDesignFlatButton}" 
+                        Foreground="Red" 
+                        HorizontalAlignment="Right"/>
+            </DockPanel>
 
-            <!-- Associated Groups -->
-            <materialDesign:Card Grid.Column="1" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="Associated Groups" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,5"/>
-                    <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
-                            <ItemsControl ItemsSource="{Binding EventGroups}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <materialDesign:Card Background="#FFF5F5F5" Margin="5" Padding="10">
-                                            <StackPanel>
-                                                <TextBlock Text="{Binding Name}" Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Bold"/>
-                                                <TextBlock Text="{Binding City}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
-                                            </StackPanel>
-                                        </materialDesign:Card>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </ScrollViewer>
-                </StackPanel>
-            </materialDesign:Card>
-        </Grid>
-    </StackPanel>
+            <!-- Event Details -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Event Info -->
+                <materialDesign:Card Grid.Column="0" Margin="0,0,10,0" Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="Start Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,0,0,5"/>
+                        <TextBlock Text="{Binding SelectedEvent.StartDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                        <TextBlock Text="End Date:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
+                        <TextBlock Text="{Binding SelectedEvent.EndDate, StringFormat=dd/MM/yyyy HH:mm}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                        <TextBlock Text="Location:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
+                        <TextBlock Text="{Binding SelectedEvent.Location}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                        <TextBlock Text="Description:" Style="{StaticResource MaterialDesignBody1TextBlock}" Margin="0,5,0,5"/>
+                        <TextBlock Text="{Binding SelectedEvent.Description}" Style="{StaticResource MaterialDesignBody2TextBlock}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </materialDesign:Card>
+
+                <!-- Associated Groups -->
+                <materialDesign:Card Grid.Column="1" Padding="10">
+                    <StackPanel>
+                        <TextBlock Text="Associated Groups" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,5"/>
+                        <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <ItemsControl ItemsSource="{Binding EventGroups}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <materialDesign:Card Background="#FFF5F5F5" Margin="5" Padding="10">
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Name}" Style="{StaticResource MaterialDesignBody1TextBlock}" FontWeight="Bold"/>
+                                                    <TextBlock Text="{Binding City}" Style="{StaticResource MaterialDesignBody2TextBlock}"/>
+                                                </StackPanel>
+                                            </materialDesign:Card>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </StackPanel>
+                </materialDesign:Card>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

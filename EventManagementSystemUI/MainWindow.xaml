@@ -16,25 +16,26 @@
         </Grid.ColumnDefinitions>
         <!-- Sidebar -->
         <materialDesign:Card Grid.Column="0" Background="{DynamicResource MaterialDesignPaper}">
-            <StackPanel x:Name="MainButtonPanel" Margin="10">
-                <ItemsControl ItemsSource="{Binding NavVM.DynamicButtons}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Content="{Binding Title}"
-                        Command="{Binding Command}"
-                        CommandParameter="{Binding CommandParameter}"
-                        Visibility="{Binding Visibility}"
-                        Background="{Binding Background}"
-                        FontWeight="{Binding FontWeight}"
-                        FontSize="{Binding FontSize}"
-                        Margin="{Binding Margin}"
-                        Style="{StaticResource MaterialDesignRaisedButton}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="MainButtonPanel" Margin="10">
+                    <ItemsControl ItemsSource="{Binding NavVM.DynamicButtons}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Content="{Binding Title}"
+                                Command="{Binding Command}"
+                                CommandParameter="{Binding CommandParameter}"
+                                Visibility="{Binding Visibility}"
+                                Background="{Binding Background}"
+                                FontWeight="{Binding FontWeight}"
+                                FontSize="{Binding FontSize}"
+                                Margin="{Binding Margin}"
+                                Style="{StaticResource MaterialDesignRaisedButton}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
         </materialDesign:Card>
-        <!-- Main Content -->
         <Frame x:Name="MainFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2" />
     </Grid>
 </Window>
