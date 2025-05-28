@@ -34,7 +34,7 @@ namespace EventManagementSystemUI.ViewModels
         private EventManagementSystem.Models.PersonWithEventsDto currentUser = new();
 
         [ObservableProperty]
-        private EventManagementSystem.Models.SimpleEventDto selectedEvent;
+        private EventManagementSystem.Models.SimpleEventDto selectedEvent = new();
 
         [RelayCommand]
         private async Task SubmitRegistration()
@@ -104,12 +104,15 @@ namespace EventManagementSystemUI.ViewModels
                 if (response.IsSuccessStatusCode)
                 {
                     var person = await response.Content.ReadFromJsonAsync<Person_>();
-
-                    MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                    CloseLogInCommand?.Execute(true);
-                    userId = person.Id;
-                    LoadUserDetailsCommand.Execute(null);
-                    _vm.NavVM.NavigateCommand.Execute("Profile");
+                    if(person != null)
+                    {
+                        MessageBox.Show("Login successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        CloseLogInCommand?.Execute(true);
+                        userId = person.Id;
+                        LoadUserDetailsCommand.Execute(null);
+                        _vm.NavVM.NavigateCommand.Execute("Profile");
+                    }
+                    
                 }
                 else if (response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -130,11 +133,6 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private void CloseLogIn(bool loggedIn = false)
         {
-            //var frame = Application.Current.MainWindow.FindName("MainFrame") as System.Windows.Controls.Frame;
-            //if (frame != null)
-            //{
-            //    frame.Content = new DashboardView { DataContext = this };
-            //}
             if (loggedIn)
             {
                 _vm.NavVM.ChangeVisibility("SignIn", false);
@@ -167,10 +165,14 @@ namespace EventManagementSystemUI.ViewModels
         private async Task LoadUserDetails()
         {
             if (userId == 0) return;
-            currentUser = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.PersonWithEventsDto>($"person/{userId.ToString()}");
+            var user = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.PersonWithEventsDto>($"person/{userId.ToString()}");
+            if (user != null)
+            {
+                CurrentUser = user;
+            }
         }
         [RelayCommand]
-        private async Task EventSelected()
+        private void EventSelected()
         {
             if (SelectedEvent is not null)
             {
