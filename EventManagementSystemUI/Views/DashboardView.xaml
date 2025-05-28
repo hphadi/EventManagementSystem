@@ -40,9 +40,9 @@
               <materialDesign:Card Grid.Column="1">
                   <StackPanel>
                       <TextBlock Text="Quick Stats" Style="{DynamicResource MaterialDesignHeadline6TextBlock}" Margin="10" />
-                      <TextBlock Text="Active Events: 5" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="10" />
-                      <TextBlock Text="Groups: 3" Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="10" />
-                  </StackPanel>
+                        <TextBlock Text="{Binding EventVM.FutureEvents.Count, StringFormat=Active Events: {0}}"
+                            Style="{DynamicResource MaterialDesignBody1TextBlock}" Margin="10" />
+                    </StackPanel>
               </materialDesign:Card>
             </Grid>
         </ScrollViewer>

@@ -122,7 +122,7 @@ namespace EventManagementSystemUI.Models
         }
     }
 
-    public class NewEventDto : ValidityEntity, IDraftClassForm
+    public class DraftEventDto : ValidityEntity, IDraftClassForm
     {
         public string Title { get; set; } = "";
         public string Description { get; set; } = "";
@@ -165,7 +165,7 @@ namespace EventManagementSystemUI.Models
                 errors.Add(ErrorMessages.EndBeforeStart);
             else if (string.IsNullOrWhiteSpace(Location) || Location == "Enter location")
                 errors.Add(ErrorMessages.LocationRequired);
-            else if (Location.Length < 10)
+            else if (Location.Length < 2)
                 errors.Add(ErrorMessages.LocationTooShort);
 
             return errors;

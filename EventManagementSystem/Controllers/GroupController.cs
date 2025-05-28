@@ -7,14 +7,9 @@ namespace EventManagementSystem.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GroupController : ControllerBase
+public class GroupController(AppDbContext context) : ControllerBase
 {
-    private readonly AppDbContext _context;
-
-    public GroupController(AppDbContext context)
-    {
-        _context = context;
-    }
+    private readonly AppDbContext _context = context;
 
     [HttpPost]
     public async Task<IActionResult> AddGroup(GroupBase group)
@@ -49,35 +44,6 @@ public class GroupController : ControllerBase
         var groups = await _context.Groups.ToListAsync();
         return Ok(groups);
     }
-
-    //[HttpGet("{id}/events")]
-    //public async Task<ActionResult<IEnumerable<Event>>> GetEventsByGroup(int id)
-    //{
-    //    var group = await _context.Groups
-    //        .Where(g => g.Id == id)
-    //        .Select(g => new {
-    //            g.Id,
-    //            g.Name,
-    //            EventGroups = g.EventGroups.Select(eg => new {
-    //                eg.EventId,
-    //                Event = new
-    //                {
-    //                    eg.Event.Id,
-    //                    eg.Event.Title,
-    //                    eg.Event.StartDate
-    //                }
-    //            })
-    //        })
-    //        .FirstOrDefaultAsync();
-
-    //    if (group == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var events = group.EventGroups.Select(eg => eg.Event).ToList();
-    //    return Ok(events);
-    //}
 
     [HttpGet("{id}")]
     public async Task<ActionResult<GroupWithEventsDto>> GetGroupDetails(string id)

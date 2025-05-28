@@ -2,8 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using EventManagementSystem.Models;
 using EventManagementSystemUI.Models;
-using EventManagementSystemUI.Views;
-using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Http;
@@ -27,10 +25,8 @@ namespace EventManagementSystemUI.ViewModels
         }
 
         [ObservableProperty]
-        private NewEventDto newEventDraft = new();
+        private DraftEventDto newEventDraft = new();
 
-//        [ObservableProperty]
-//        private DateTime? eventEndDateTime;
 
         [ObservableProperty]
         private ObservableCollection<EventManagementSystem.Models.GroupBase>? selectedGroups;
@@ -50,28 +46,20 @@ namespace EventManagementSystemUI.ViewModels
             var startDateUtc = NewEventDraft.StartDateTime.Value.ToUniversalTime();
             var endDateUtc = NewEventDraft.EndDateTime.Value.ToUniversalTime();
 
-            var newEvent = new EventDto
+            var newEvent = new NewEventDto
             {
                 Title = NewEventDraft.Title,
                 Description = NewEventDraft.Description,
                 StartDate = startDateUtc,
                 EndDate = endDateUtc,
                 Location = NewEventDraft.Location,
-                CreatedAt = DateTime.Now.ToUniversalTime(),
-                GroupIds = SelectedGroups.IsNullOrEmpty()? null : SelectedGroups.Select(g => g.Id).ToList(),
-                PersonIds = new List<int> { _vm.UserVM.CurrentUser.Id}
+                CreatedAt = DateTime.UtcNow,
+                GroupIds = SelectedGroups?.Any() == true
+                    ? SelectedGroups.Select(g => g.Id).ToList()
+                    : null,
+                PersonIds = new List<int> { _vm.UserVM.CurrentUser.Id }
             };
 
-//            var newEvent = new EventManagementSystem.Models.EventDto
-//            {
-//                Title = EventTitle,
-//                Description = EventDescription,
-//                StartDate = startDateUtc,
-//                EndDate = endDateUtc,
-//                Location = EventLocation,
-//                CreatedAt = DateTime.Now.ToUniversalTime(),
-//                GroupIds = SelectedGroups.Select(g => g.Id).ToList()
-//            };
 
             try
             {

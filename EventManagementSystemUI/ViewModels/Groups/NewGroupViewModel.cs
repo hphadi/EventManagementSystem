@@ -26,12 +26,6 @@ namespace EventManagementSystemUI.ViewModels
         [ObservableProperty]
         private DraftGroupDto newGroupDraft = new();
 
-        //        [ObservableProperty]
-        //        private DateTime? eventEndDateTime;
-
-        //[ObservableProperty]
-        //private ObservableCollection<EventManagementSystem.Models.EventBase>? selectedEvents;
-
         [RelayCommand]
         private async Task SubmitNewGroup()
         {
@@ -44,19 +38,8 @@ namespace EventManagementSystemUI.ViewModels
                 Description = NewGroupDraft.Description,
                 City = NewGroupDraft.City,
                 CreatedAt = DateTime.Now.ToUniversalTime(),
-                //EventsIds = SelectedEvents.IsNullOrEmpty() ? null : SelectedEvents.Select(g => g.Id).ToList()
             };
 
-            //            var newEvent = new EventManagementSystem.Models.EventDto
-            //            {
-            //                Title = EventTitle,
-            //                Description = EventDescription,
-            //                StartDate = startDateUtc,
-            //                EndDate = endDateUtc,
-            //                Location = EventLocation,
-            //                CreatedAt = DateTime.Now.ToUniversalTime(),
-            //                GroupIds = SelectedGroups.Select(g => g.Id).ToList()
-            //            };
 
             try
             {

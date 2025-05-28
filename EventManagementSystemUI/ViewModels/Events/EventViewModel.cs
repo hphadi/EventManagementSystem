@@ -65,7 +65,7 @@ namespace EventManagementSystemUI.ViewModels
         }
 
         [RelayCommand]
-        private async Task EventSelected(Event selected)
+        private void EventSelected(Event selected)
         {
             if(selected == null) 
                 selected = _vm.EventVM.SelectedEvent;

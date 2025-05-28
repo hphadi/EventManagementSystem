@@ -33,12 +33,16 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task LoadGroupDetails(string groupId)
         {
-            SelectedGroup = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.GroupWithEventsDto>($"group/{groupId.ToString()}");
+            var group = await _httpClient.GetFromJsonAsync<EventManagementSystem.Models.GroupWithEventsDto>($"group/{groupId}");
+            if(group!=null)
+            {
+                SelectedGroup = group;
+            }
         }
         [RelayCommand]
-        private async Task Close()
+        private void Close()
         {
-            _vm.NavVM.DynamicButtons.Remove(_vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "g" + Id.ToString()));
+            _vm.NavVM.DeleteNavButtonCommand.Execute("g" + Id);
             _vm.NavVM.NavigateCommand.Execute("Groups");
         }
         [RelayCommand]

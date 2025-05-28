@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Windows;
 using EventManagementSystem.Models;
 
 namespace EventManagementSystemUI.ViewModels
@@ -28,24 +26,17 @@ namespace EventManagementSystemUI.ViewModels
         [RelayCommand]
         private async Task LoadEventDetails(string eventId)
         {
-            SelectedEvent = await _httpClient.GetFromJsonAsync<EventWithGroupsDto>($"event/{eventId}");
+            var event_ = await _httpClient.GetFromJsonAsync<EventWithGroupsDto>($"event/{eventId}");
+            if (event_ != null)
+            {
+                SelectedEvent = event_;
+            }
         }
         [RelayCommand]
-        private async Task Close()
+        private void Close()
         {
-            var buttonToRemove = _vm.NavVM.DynamicButtons.FirstOrDefault(b => b.Id == "e" + Id.ToString());
-            if (buttonToRemove != null)
-            {
-                _vm.NavVM.DynamicButtons.Remove(buttonToRemove);
-            }
+            _vm.NavVM.DeleteNavButtonCommand.Execute("e" + Id);
             _vm.NavVM.NavigateCommand.Execute("Events");
         }
-
-        //[RelayCommand]
-        //public async Task NavigateToEventDetails(int eventId)
-        //{
-        //    await LoadEventDetails(eventId);
-        //    _navigateAction?.Invoke(this); 
-        //}
     }
 }

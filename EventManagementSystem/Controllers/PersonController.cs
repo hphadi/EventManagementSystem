@@ -7,14 +7,9 @@ namespace EventManagementSystem.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PersonController : ControllerBase
+public class PersonController(AppDbContext context) : ControllerBase
 {
-    private readonly AppDbContext _context;
-
-    public PersonController(AppDbContext context)
-    {
-        _context = context;
-    }
+    private readonly AppDbContext _context = context;
 
     // ✅ Sign up (registration)
     [HttpPost("register")]
@@ -43,21 +38,6 @@ public class PersonController : ControllerBase
 
         person.Password = ""; // hide password if returning person
         return Ok(person);
-    }
-
-    // ✅ Delete user
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var person = await _context.People.FindAsync(id);
-        if (person == null)
-        {
-            return NotFound();
-        }
-
-        _context.People.Remove(person);
-        await _context.SaveChangesAsync();
-        return NoContent();
     }
 
     [HttpGet("{id}")]

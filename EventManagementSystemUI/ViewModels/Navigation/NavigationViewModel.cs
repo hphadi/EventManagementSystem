@@ -77,7 +77,18 @@ namespace EventManagementSystemUI.ViewModels
                         FontSize = fontSize,
                         Margin = margin ?? new Thickness(5)
                     });
-                }
+        }
+
+
+        [RelayCommand]
+        public void DeleteNavButton(string id)
+        {
+            NavigationButton? button = GetButtonById(id);
+            if(button != null)
+            {
+                DynamicButtons.Remove(button);
+            }
+        }
 
 
         [RelayCommand]

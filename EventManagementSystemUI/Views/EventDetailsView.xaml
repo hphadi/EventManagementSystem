@@ -54,7 +54,7 @@
                         <TextBlock Text="Associated Groups" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Margin="0,0,0,5"/>
                         <ScrollViewer Height="300" VerticalScrollBarVisibility="Auto">
                             <StackPanel>
-                                <ItemsControl ItemsSource="{Binding EventGroups}">
+                                <ItemsControl ItemsSource="{Binding SelectedEvent.Groups}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <materialDesign:Card Background="#FFF5F5F5" Margin="5" Padding="10">

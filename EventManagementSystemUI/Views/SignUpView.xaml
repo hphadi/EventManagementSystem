@@ -89,28 +89,6 @@
                         </EventTrigger>
                     </Button.Triggers>
                 </Button>
-
-                <Button Content="Cancel" Margin="5" Padding="15,5" Style="{DynamicResource MaterialDesignRaisedButton}"
-                        Background="#FF607D8B" Foreground="White" Command="{Binding UserVM.CloseLogInCommand}">
-                    <Button.Triggers>
-                        <EventTrigger RoutedEvent="Button.MouseEnter">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                    To="#FF78909C" Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="Button.MouseLeave">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)"
-                                                    To="#FF607D8B" Duration="0:0:0.2" />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </Button.Triggers>
-                </Button>
             </StackPanel>
         </Grid>
     </ScrollViewer>

@@ -3,13 +3,10 @@ using CommunityToolkit.Mvvm.Input;
 using EventManagementSystem.Models;
 using EventManagementSystemUI.Models;
 using EventManagementSystemUI.Tools;
-using EventManagementSystemUI.Views;
-using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Windows;
-using System.Windows.Data;
 
 namespace EventManagementSystemUI.ViewModels
 {

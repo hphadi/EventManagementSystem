@@ -8,14 +8,9 @@ namespace EventManagementSystem.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class EventController : ControllerBase
+public class EventController(AppDbContext context) : ControllerBase
 {
-    private readonly AppDbContext _context;
-
-    public EventController(AppDbContext context)
-    {
-        _context = context;
-    }
+    private readonly AppDbContext _context = context;
 
     // get all Events
     [HttpGet]
@@ -35,7 +30,7 @@ public class EventController : ControllerBase
     // new Event
     [HttpPost]
 
-    public async Task<IActionResult> CreateEvent(EventDto dto)
+    public async Task<IActionResult> CreateEvent(NewEventDto dto)
     {
         var newEvent = new Event
         {

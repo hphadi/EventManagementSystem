@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using EventManagementSystemUI.ViewModels;
 
 namespace EventManagementSystemUI
@@ -23,4 +25,5 @@ namespace EventManagementSystemUI
             }
         }
     }
+
 }
