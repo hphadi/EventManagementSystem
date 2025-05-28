@@ -4,7 +4,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:EventManagementSystemUI.ViewModels"
         xmlns:local="clr-namespace:EventManagementSystemUI.Views"
-        Title="Event Management System" Height="450" Width="800">
+        Title="Event Management System" Height="600" Width="800"  WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
