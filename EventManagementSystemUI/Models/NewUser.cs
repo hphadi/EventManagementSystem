@@ -120,11 +120,6 @@ namespace EventManagementSystemUI.Models
                 errors.Add(ErrorMessages.PasswordRequired);
             return errors;
         }
-        //public bool IsValid()
-        //{
-        //    return !(string.IsNullOrWhiteSpace(UserName) || UserName == "Enter username" ||
-        //        string.IsNullOrWhiteSpace(Password) || Password == "Enter password");
-        //}
     }
 
     public class NewEventDto : ValidityEntity, IDraftClassForm
@@ -175,12 +170,6 @@ namespace EventManagementSystemUI.Models
 
             return errors;
         }
-        //public bool IsValid()
-        //{
-        //    return !(string.IsNullOrWhiteSpace(Title) || Title == "Enter title" ||
-        //        string.IsNullOrWhiteSpace(Description) || Description == "Enter description" ||
-        //        string.IsNullOrWhiteSpace(Location) || Location == "Enter location");
-        //}
     }
 
     public class DraftGroupDto : ValidityEntity, IDraftClassForm
@@ -218,11 +207,5 @@ namespace EventManagementSystemUI.Models
 
             return errors;
         }
-        //public bool IsValid()
-        //{
-        //    return !(string.IsNullOrWhiteSpace(Name) || Name == "Enter name" ||
-        //        string.IsNullOrWhiteSpace(Description) || Description == "Enter description" ||
-        //        string.IsNullOrWhiteSpace(City) || City == "Enter city");
-        //}
     }
 }
