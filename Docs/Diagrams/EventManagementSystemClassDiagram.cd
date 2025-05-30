@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Comment CommentText="EventController uses EventDto as output and retrieves data from Event">
+    <Position X="0.5" Y="6.083" Height="0.76" Width="1.7" />
+  </Comment>
+  <Class Name="EventManagementSystem.Models.Event" Collapsed="true">
+    <Position X="0.5" Y="0.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAKAAAAAAAgAEAAACIAAAAgAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\Event.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManagementSystem.Models.EventDto" Collapsed="true">
+    <Position X="4" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAEAAAAAgAEAAACIAAAAgAgAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Models\EventDto.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Event" />
+      <Property Name="Group" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EventManagementSystem.Models.EventGroup" Collapsed="true">
+    <Position X="4" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAkAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\EventGroup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManagementSystem.Models.Group" Collapsed="true">
+    <Position X="6.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAKAAAAAAAgAAAIAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Group.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManagementSystem.Models.Person">
+    <Position X="10.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAASAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Person.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManagementSystem.Models.PersonDto">
+    <Position X="10.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIACAAAAAAAAAAAAASAAAAQAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Person.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Person" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EventManagementSystem.Models.LoginDto">
+    <Position X="10" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Person.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManagementSystem.Controllers.EventController" Collapsed="true">
+    <Position X="0.75" Y="7" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABABAAAAAAAAAAgAAAAAAAIAgAAAACAA=</HashCode>
+      <FileName>Controllers\EventController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AppDbContext" />
+      <Property Name="EventDto" />
+      <Property Name="Event" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EventManagementSystem.Data.AppDbContext" Collapsed="true">
+    <Position X="5.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAEAAAIAAAAAAAAAAAAAAEgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\AppDbContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManagementSystem.Controllers.GroupController" Collapsed="true">
+    <Position X="7.75" Y="6.75" Width="1.5" />
+    <AssociationLine Name="Group" Type="EventManagementSystem.Models.Group" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="8.875" Y="6.75" />
+        <Point X="8.875" Y="3.266" />
+        <Point X="7.828" Y="3.266" />
+        <Point X="7.828" Y="1.312" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAABABAAAAIAAAAAgAgAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\GroupController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="AppDbContext" />
+      <Property Name="Group" />
+      <Property Name="EventDto" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="EventManagementSystem.Controllers.PersonController" Collapsed="true">
+    <Position X="13.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAEBAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Controllers\PersonController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
